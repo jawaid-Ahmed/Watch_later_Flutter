@@ -6,14 +6,14 @@ import 'package:practice/api/movie_result.dart';
 import 'package:practice/widgets/nowplaying/single_movie_item_widget.dart';
 
 
-class PlayingNow extends StatefulWidget {
-  const PlayingNow({Key? key}) : super(key: key);
+class Popular extends StatefulWidget {
+  const Popular({Key? key}) : super(key: key);
 
   @override
-  State<PlayingNow> createState() => _PlayingNowState();
+  State<Popular> createState() => _PopularState();
 }
 
-class _PlayingNowState extends State<PlayingNow> {
+class _PopularState extends State<Popular> {
 
   bool isLoading=false;
   late Future<Movie> futureData;
@@ -55,7 +55,7 @@ class _PlayingNowState extends State<PlayingNow> {
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.0),
-          child: Text('Now Playing',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,),),
+          child: Text('Popular',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,),),
         ),
         SizedBox(
           height: 300,

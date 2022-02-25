@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:practice/api/movie_response.dart';
 import 'package:practice/api/movie_result.dart';
-import 'package:practice/widgets/single_movie_item_widget.dart';
+import 'package:practice/widgets/nowplaying/single_movie_item_widget.dart';
+
 
 class PlayingNow extends StatefulWidget {
   const PlayingNow({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class _PlayingNowState extends State<PlayingNow> {
     setState(() {
       isLoading=true;
     });
-    final response = await http.get(Uri.parse('https://api.themoviedb.org/3/movie/popular?api_key=b8cdc8a029caa73a47ab09762ce5c157'));
+    final response = await http.get(Uri.parse('https://api.themoviedb.org/3/movie/now_playing?api_key=b8cdc8a029caa73a47ab09762ce5c157'));
 
     if(response.statusCode==200) {
 
@@ -78,7 +79,7 @@ class _PlayingNowState extends State<PlayingNow> {
                 return Text("${snapshot.error}");
               }
               // By default show a loading spinner.
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             },
           ),
         ),

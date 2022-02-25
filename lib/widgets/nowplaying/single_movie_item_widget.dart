@@ -20,7 +20,7 @@ class MovieItemWidget extends StatelessWidget {
           ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: Image(image: NetworkImage(ApiService.IMAGE_URL+movie.posterPath),fit: BoxFit.fill,width: double.infinity,)),
-          IconButton(onPressed: (){}, icon: Icon(Icons.play_circle_fill_outlined,size: 32,))
+          IconButton(onPressed: (){}, icon: const Icon(Icons.play_circle_fill_outlined,size: 32,))
           // Positioned(
           //   left: 5,
           //   bottom: 30,

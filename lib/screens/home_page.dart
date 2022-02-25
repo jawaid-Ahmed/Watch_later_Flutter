@@ -1,10 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:practice/api/api_response.dart';
-import 'package:practice/api/media.dart';
-import 'package:practice/api/media_view_model.dart';
-import 'package:practice/widgets/change_theme_button_widget.dart';
-import 'package:provider/provider.dart';
+import 'package:practice/widgets/nowplaying/playing_now_list.dart';
+import 'package:practice/widgets/popular/popular_list.dart';
+import 'package:practice/widgets/top_rated/toprated_list.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,8 +19,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
 
     final _inputController = TextEditingController();
-    ApiResponse apiResponse = Provider.of<MediaViewModel>(context).response;
-    List<Media> mediaList = apiResponse.data as List<Media>;
+
 
 
     return Scaffold(
@@ -52,18 +52,43 @@ class _HomePageState extends State<HomePage> {
         ],
 
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        borderRadius: BorderRadius.circular(9),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: CupertinoSearchTextField(placeholder: "search movies series ",
+                        controller: _inputController,
+                        onChanged: (value) async {
+                          if (value.isNotEmpty) {
+
+
+                          }
+                        },
+                      )),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.2,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: Colors.orangeAccent,
                       borderRadius: BorderRadius.circular(9),
                       boxShadow: [
                         BoxShadow(
@@ -74,42 +99,20 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    child: CupertinoSearchTextField(placeholder: "search movies series ",
-                      controller: _inputController,
-                      onChanged: (value){
-                        // if (value.isNotEmpty) {
-                        //   Provider.of<MediaViewModel>(context)
-                        //       .setSelectedMedia();
-                        //   Provider.of<MediaViewModel>(context,
-                        //       listen: false)
-                        //       .fetchMediaData(value);
-                        // }
-                      },
-                    )),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.2,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.orangeAccent,
-                    borderRadius: BorderRadius.circular(9),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
+                    child: IconButton(onPressed: (){},icon:const Icon(Icons.search),),
                   ),
-                  child: IconButton(onPressed: (){},icon:const Icon(Icons.search),),
-                )
-              ],
+
+
+
+                ],
+              ),
             ),
-          ),
 
-
-
-        ],
+            const PlayingNow(),
+            const Popular(),
+            const TopRated()
+          ],
+        ),
       ) ,
     );
 

@@ -6,14 +6,14 @@ import 'package:practice/api/movie_result.dart';
 import 'package:practice/widgets/nowplaying/single_movie_item_widget.dart';
 
 
-class Popular extends StatefulWidget {
-  const Popular({Key? key}) : super(key: key);
+class TopRated extends StatefulWidget {
+  const TopRated({Key? key}) : super(key: key);
 
   @override
-  State<Popular> createState() => _PopularState();
+  State<TopRated> createState() => _TopRatedState();
 }
 
-class _PopularState extends State<Popular> {
+class _TopRatedState extends State<TopRated> {
 
   bool isLoading=false;
   late Future<Movie> futureData;
@@ -28,7 +28,7 @@ class _PopularState extends State<Popular> {
     setState(() {
       isLoading=true;
     });
-    final response = await http.get(Uri.parse('https://api.themoviedb.org/3/movie/popular?api_key=b8cdc8a029caa73a47ab09762ce5c157'));
+    final response = await http.get(Uri.parse('https://api.themoviedb.org/3/movie/top_rated?api_key=b8cdc8a029caa73a47ab09762ce5c157'));
 
     if(response.statusCode==200) {
 
@@ -55,7 +55,7 @@ class _PopularState extends State<Popular> {
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.0),
-          child: Text('Popular',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,),),
+          child: Text('Top Rated',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,),),
         ),
         SizedBox(
           height: 300,
