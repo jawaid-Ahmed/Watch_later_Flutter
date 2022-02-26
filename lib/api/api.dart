@@ -12,6 +12,7 @@ class ApiService{
   static const String GET_TRAILER='{movie_id}/videos';
   ///we can just pass our prefered size instead of original as w400
   static const String IMAGE_URL='https://image.tmdb.org/t/p/w300/';
+  static const String IMAGE_URLBIG='https://image.tmdb.org/t/p/original/';
 
 
 

@@ -22,7 +22,7 @@ class Result {
   String backdropPath;
   List<int> genreIds;
   int id;
-  OriginalLanguage originalLanguage;
+  String originalLanguage;
   String originalTitle;
   String overview;
   double popularity;
@@ -38,7 +38,7 @@ class Result {
     backdropPath: json["backdrop_path"],
     genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
     id: json["id"],
-    originalLanguage: OriginalLanguage.EN,
+    originalLanguage: json["original_language"] ,
     originalTitle: json["original_title"],
     overview: json["overview"],
     popularity: json["popularity"].toDouble(),
@@ -55,7 +55,7 @@ class Result {
     "backdrop_path": backdropPath,
     "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
     "id": id,
-    "original_language": originalLanguageValues.reverse[originalLanguage],
+    "original_language": originalLanguage,
     "original_title": originalTitle,
     "overview": overview,
     "popularity": popularity,
@@ -70,10 +70,10 @@ class Result {
 
 }
 
-enum OriginalLanguage { EN, JA, HI }
-
-final originalLanguageValues = EnumValues({
-  "en": OriginalLanguage.EN,
-  "hi": OriginalLanguage.HI,
-  "ja": OriginalLanguage.JA
-});
+// enum OriginalLanguage { EN, JA, HI }
+//
+// final originalLanguageValues = EnumValues({
+//   "en": OriginalLanguage.EN,
+//   "hi": OriginalLanguage.HI,
+//   "ja": OriginalLanguage.JA
+// });
