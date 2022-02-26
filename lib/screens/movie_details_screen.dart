@@ -1,10 +1,13 @@
-import 'dart:collection';
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:practice/api/api.dart';
 import 'package:practice/api/movie_result.dart';
+import 'package:practice/api/trailer_data_response.dart';
+import 'package:practice/screens/video_player_screen.dart';
 import 'package:practice/widgets/recommeds/recommend_list.dart';
+import 'package:http/http.dart' as http;
 
 class MovieDetailsScreen extends StatefulWidget {
   Result movie;
@@ -16,6 +19,9 @@ class MovieDetailsScreen extends StatefulWidget {
 }
 
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
+
+  //final response = await http.get(Uri.parse(ApiService.BASE_URL+'${widget.movie}'+ApiService.GET_TRAILER+ApiService.API_KEY));
+
 
   genersFromId(List<int> ids){
     Map<int, String> moviesGeners={
@@ -52,8 +58,54 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     return value;
   }
 
+
+  bool isLoading=false;
+  bool trailerLoading=false;
+  late Future<TrailerData> futureData;
+  String trailerKey='';
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadTrailer();
+
+  }
+  Future<void> loadTrailer()async {
+
+    setState(() {
+      trailerLoading = true;
+    });
+    final response = await http.get(Uri.parse('https://api.themoviedb.org/3/movie/${widget.movie.id}/videos?api_key=b8cdc8a029caa73a47ab09762ce5c157'));
+    if(response.statusCode==200){
+
+      var jsonResp=jsonDecode(response.body);
+      TrailerData movie=TrailerData.fromJson(jsonResp);
+
+      for(var data in movie.results){
+        if(data.official){
+          trailerKey=movie.results.first.key;
+        }
+      }
+
+      if(trailerKey !='') {
+        setState(() {
+          trailerLoading = false;
+
+        });
+      }
+
+    }else{
+
+
+    }
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
 
     Size size=MediaQuery.of(context).size;
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -82,7 +134,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           color: Theme.of(context).scaffoldBackgroundColor
                         ),
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {Navigator.pop(context);},
                           icon: const Icon(Icons.arrow_back,size: 32,),
                         ),
                       ),
@@ -109,8 +161,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       color: Theme.of(context).scaffoldBackgroundColor
                   ),
                   child: TextButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.play_circle_fill_outlined,size: 38,),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) =>VideoPlayerScreen(trailer_key: trailerKey,)));
+                    },
+                    icon: trailerLoading ? const CircularProgressIndicator() : const Icon(Icons.play_circle_fill_outlined,size: 38,),
                     label: const Text('Watch Trailer',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
                   ),
                 ),)
@@ -214,4 +268,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       ),
     );
   }
+
+
 }

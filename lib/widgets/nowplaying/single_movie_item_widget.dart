@@ -23,21 +23,10 @@ class MovieItemWidget extends StatelessWidget {
             ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Image(image: NetworkImage(ApiService.IMAGE_URL+movie.posterPath),fit: BoxFit.fill,width: double.infinity,)),
-            IconButton(onPressed: (){}, icon: const Icon(Icons.play_circle_fill_outlined,size: 32,))
-            // Positioned(
-            //   left: 5,
-            //   bottom: 30,
-            //   child: Column(children: [
-            //     Padding(
-            //       padding: const EdgeInsets.all(8.0),
-            //       child: Text(movie.title,style: const TextStyle(fontSize: 11,fontWeight: FontWeight.w600),),
-            //     ),
-            //     Padding(
-            //       padding: const EdgeInsets.all(8.0),
-            //       child: Text(movie.releaseDate.toString().split(' ').first,style: const TextStyle(fontSize: 11,fontWeight: FontWeight.w600),),
-            //     )
-            //   ],),
-            // )
+            Positioned(
+                top: 15,
+                left: 15,
+                child: IconButton(onPressed: (){}, icon: const Icon(Icons.play_circle_fill_outlined,size: 32,)))
           ],
         ),
       ),
