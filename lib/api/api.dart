@@ -2,6 +2,7 @@ class ApiService{
 
   static const String BASE_URL='https://api.themoviedb.org/3/movie/';
   static const String API_KEY='?api_key=b8cdc8a029caa73a47ab09762ce5c157';
+  static const String MYAPI_KEY='?api_key=b7a0c4efe47ff18c7be56824d6e9972b';
   static const String POPULAR='popular';
   static const String UPCOMING='upcoming';
   static const String LATEST='latest';

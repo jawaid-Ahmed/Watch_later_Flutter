@@ -15,7 +15,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
 
   @override
   void initState() {
-    Hive.openBox('hivemovies');
+    Hive.openBox<HiveMovie>('hivemovies');
     super.initState();
   }
 

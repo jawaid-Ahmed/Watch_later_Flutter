@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:practice/api/api.dart';
 import 'package:practice/api/movie_response.dart';
 import 'package:practice/api/movie_result.dart';
 import 'package:practice/widgets/movie_placeholder_widget.dart';
@@ -29,7 +30,7 @@ class _TopRatedState extends State<TopRated> {
     setState(() {
       isLoading=true;
     });
-    final response = await http.get(Uri.parse('https://api.themoviedb.org/3/movie/top_rated?api_key=b8cdc8a029caa73a47ab09762ce5c157'));
+    final response = await http.get(Uri.parse(ApiService.BASE_URL+ApiService.TOP_RATED+ApiService.API_KEY));
 
     if(response.statusCode==200) {
 

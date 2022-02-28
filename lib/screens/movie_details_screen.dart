@@ -65,6 +65,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
   bool isLoading=false;
   bool trailerLoading=false;
+  bool isFavourite=false;
   late Future<TrailerData> futureData;
   String trailerKey='';
 
@@ -72,6 +73,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   void initState() {
     super.initState();
 
+    createFavourite();
     loadTrailer();
 
   }
@@ -158,19 +160,42 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                         child: IconButton(
                           onPressed: () {
 
-                            addHiveMovie(
-                                widget.movie.title,
-                                widget.movie.releaseDate.toString(),
-                                widget.movie.originalLanguage.toString(),
-                                widget.movie.id,
-                                widget.movie.adult,
-                                widget.movie.posterPath,
-                                widget.movie.overview,
-                                widget.movie.voteAverage,
-                                widget.movie.voteCount);
+                            if(isFavourite){
+                              // HiveMovie m=HiveMovie();
+                              //     m.title=widget.movie.title
+                              //     m.releaseDate=widget.movie.releaseDate.toString()
+                              //     m.originalLanguage=widget.movie.originalLanguage.toString()
+                              //     m.id=widget.movie.id
+                              //     m.adult=widget.movie.adult
+                              //     widget.movie.posterPath
+                              //     widget.movie.overview
+                              //     widget.movie.voteAverage
+                              //     widget.movie.voteCount;
+                              // deleteHiveMovie(m);
+                              setState(() {
+                                isFavourite = false;
+                              });
+
+                            }else {
+                              addHiveMovie(
+                                  widget.movie.title,
+                                  widget.movie.releaseDate.toString(),
+                                  widget.movie.originalLanguage.toString(),
+                                  widget.movie.id,
+                                  widget.movie.adult,
+                                  widget.movie.posterPath,
+                                  widget.movie.overview,
+                                  widget.movie.voteAverage,
+                                  widget.movie.voteCount,context);
+
+                              setState(() {
+                                isFavourite = true;
+                              });
+                            }
 
                           },
-                          icon: const Icon(Icons.favorite_outline,size: 32,),
+                          icon: isFavourite ? const Icon(Icons.favorite,size: 32,color: Colors.red,)
+                                : const Icon(Icons.favorite_outline,size: 32,),
                         ),
                       ),
                     ],
@@ -295,9 +320,24 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   }
 
 
+  movieExist(HiveMovie movie){
+
+    bool exist=false;
+
+    final box = Boxes.getHiveMovies();
+    for(HiveMovie movi in box.values){
+      if(movi.id==movie.id){
+        return true;
+      }
+    }
+
+    return exist;
+
+  }
+
   Future addHiveMovie(String title, String releaseDate,String lang,int id,bool isAdult,
-      String imageUrl,String overView,double voteAvg,int voteCOunt) async {
-    final transaction = HiveMovie()
+      String imageUrl,String overView,double voteAvg,int voteCOunt,BuildContext context) async {
+    final movie = HiveMovie()
       ..id=id
     ..title=title
     ..releaseDate=releaseDate
@@ -308,15 +348,24 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     ..voteAverage=voteAvg
     ..originalLanguage=lang;
 
+
     final box = Boxes.getHiveMovies();
-    box.add(transaction);
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Movie Added Successfully")));
+
+    if(!movieExist(movie)) {
+      box.add(movie);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Movie Added Successfully")));
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Movie Already Favourite")));
+    }
   }
 
 
 
-  void deleteTransaction(HiveMovie hiveMovie) {
+  void deleteHiveMovie(HiveMovie hiveMovie) {
     hiveMovie.delete();
-    //setState(() => transactions.remove(transaction));
+  }
+
+  void createFavourite() {
+
   }
 }

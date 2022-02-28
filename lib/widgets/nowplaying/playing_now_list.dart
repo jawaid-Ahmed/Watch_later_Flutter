@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:practice/api/api.dart';
 import 'package:practice/api/movie_response.dart';
 import 'package:practice/api/movie_result.dart';
 import 'package:practice/widgets/movie_placeholder_widget.dart';
@@ -19,6 +20,7 @@ class _PlayingNowState extends State<PlayingNow> {
   bool isLoading=false;
   late Future<Movie> futureData;
 
+
   @override
   void initState() {
     super.initState();
@@ -29,7 +31,7 @@ class _PlayingNowState extends State<PlayingNow> {
     setState(() {
       isLoading=true;
     });
-    final response = await http.get(Uri.parse('https://api.themoviedb.org/3/movie/now_playing?api_key=b8cdc8a029caa73a47ab09762ce5c157'));
+    final response = await http.get(Uri.parse(ApiService.BASE_URL+ApiService.INTHEATERS+ApiService.API_KEY));
 
     if(response.statusCode==200) {
 
