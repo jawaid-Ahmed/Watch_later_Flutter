@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:practice/api/movie_response.dart';
 import 'package:practice/api/movie_result.dart';
+import 'package:practice/widgets/movie_placeholder_widget.dart';
 import 'package:practice/widgets/nowplaying/single_movie_item_widget.dart';
 
 
@@ -40,12 +41,11 @@ class _RecommendState extends State<Recommend> {
         isLoading=true;
       });
       return movie;
-      //return res.map((data) => Result.fromJson(data)).toList();
+
 
     }else{
+
       return jsonDecode(response.body);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Wrong Response")));
     }
   }
 
@@ -81,7 +81,15 @@ class _RecommendState extends State<Recommend> {
                 return Text("${snapshot.error}");
               }
               // By default show a loading spinner.
-              return CircularProgressIndicator();
+              return ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: 10,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, int index) {
+
+                    return const MoviePlaceHolder();
+                  }
+              );
             },
           ),
         ),

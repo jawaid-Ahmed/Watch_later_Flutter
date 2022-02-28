@@ -2,12 +2,16 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 import 'package:practice/api/api.dart';
 import 'package:practice/api/movie_result.dart';
 import 'package:practice/api/trailer_data_response.dart';
+import 'package:practice/hive/hivemovie.dart';
 import 'package:practice/screens/video_player_screen.dart';
 import 'package:practice/widgets/recommeds/recommend_list.dart';
 import 'package:http/http.dart' as http;
+
+import '../hive/boxes.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
   Result movie;
@@ -71,6 +75,14 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     loadTrailer();
 
   }
+
+  @override
+  void dispose(){
+    Hive.close();
+
+    super.dispose();
+  }
+
   Future<void> loadTrailer()async {
 
     setState(() {
@@ -144,7 +156,20 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             color: Theme.of(context).scaffoldBackgroundColor
                         ),
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+
+                            addHiveMovie(
+                                widget.movie.title,
+                                widget.movie.releaseDate.toString(),
+                                widget.movie.originalLanguage.toString(),
+                                widget.movie.id,
+                                widget.movie.adult,
+                                widget.movie.posterPath,
+                                widget.movie.overview,
+                                widget.movie.voteAverage,
+                                widget.movie.voteCount);
+
+                          },
                           icon: const Icon(Icons.favorite_outline,size: 32,),
                         ),
                       ),
@@ -220,7 +245,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: 12.0,right: 8),
                         child: Text(widget.movie.originalLanguage
-                          ,style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16,
+                          ,style: const TextStyle(fontWeight: FontWeight.w600,fontSize: 16,
                           ),),
                       ),
                     ],
@@ -270,4 +295,28 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   }
 
 
+  Future addHiveMovie(String title, String releaseDate,String lang,int id,bool isAdult,
+      String imageUrl,String overView,double voteAvg,int voteCOunt) async {
+    final transaction = HiveMovie()
+      ..id=id
+    ..title=title
+    ..releaseDate=releaseDate
+    ..adult=isAdult
+    ..posterPath=imageUrl
+    ..overview=overView
+    ..voteCount=voteCOunt
+    ..voteAverage=voteAvg
+    ..originalLanguage=lang;
+
+    final box = Boxes.getHiveMovies();
+    box.add(transaction);
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Movie Added Successfully")));
+  }
+
+
+
+  void deleteTransaction(HiveMovie hiveMovie) {
+    hiveMovie.delete();
+    //setState(() => transactions.remove(transaction));
+  }
 }

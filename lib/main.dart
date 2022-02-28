@@ -1,10 +1,18 @@
 
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:practice/hive/hivemovie.dart';
 import 'package:practice/providers/theme_provider.dart';
 import 'package:practice/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(HiveMovieAdapter());
+  await Hive.openBox<HiveMovie>('hivemovies');
+
   runApp(const MyApp());
 }
 

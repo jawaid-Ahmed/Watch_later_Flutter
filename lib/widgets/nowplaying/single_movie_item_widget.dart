@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:practice/api/api.dart';
 import 'package:practice/api/movie_result.dart';
@@ -22,7 +23,18 @@ class MovieItemWidget extends StatelessWidget {
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: Image(image: NetworkImage(ApiService.IMAGE_URL+movie.posterPath),fit: BoxFit.fill,width: double.infinity,)),
+                child:
+                CachedNetworkImage(
+                  imageUrl: ApiService.IMAGE_URL+movie.posterPath,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  placeholder: (context,val){
+                    return const Center(child:Image(image:  AssetImage('assets/images/icon.png'),));
+                  },
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
+            ),
+
             Positioned(
                 top: 15,
                 left: 15,
