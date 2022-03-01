@@ -1,8 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:practice/api/api.dart';
+import 'package:practice/api/movie_response.dart';
+import 'package:practice/api/movie_result.dart';
 import 'package:practice/widgets/nowplaying/playing_now_list.dart';
+import 'package:practice/widgets/nowplaying/single_movie_item_widget.dart';
 import 'package:practice/widgets/popular/popular_list.dart';
 import 'package:practice/widgets/top_rated/toprated_list.dart';
+import 'package:http/http.dart' as http;
+import 'package:search_page/search_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,6 +20,46 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+
+  late List<Result> moviesList;
+  late Future<Movie> futureData;
+
+  bool isLoading=false;
+
+
+  @override
+  void initState(){
+    super.initState();
+    futureData=loadAllMovies();
+  }
+
+  Future<Movie> loadAllMovies()async {
+    setState(() {
+      isLoading=true;
+    });
+    final response = await http.get(Uri.parse(ApiService.BASE_URL+ApiService.INTHEATERS+ApiService.API_KEY));
+
+    if(response.statusCode==200) {
+
+      var jsonResp=jsonDecode(response.body);
+      Movie movie=Movie.fromJson(jsonResp);
+      List<Result> moviesList=movie.results;
+
+      setState(() {
+        this.moviesList=moviesList;
+        isLoading=true;
+      });
+      return movie;
+      //return res.map((data) => Result.fromJson(data)).toList();
+
+    }else{
+      return jsonDecode(response.body);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Wrong Response")));
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -86,10 +134,29 @@ class _HomePageState extends State<HomePage> {
                         placeholder: "search movies series ",
                         controller: _inputController,
                         onTap: () {
-                          createDialoge();
+                          //createDialoge();
                         },
                         onChanged: (value) async {
-                          if (value.isNotEmpty) {}
+                          if (value.isNotEmpty) {
+                            showSearch(
+                              context: context,
+                              delegate: SearchPage<Result>(
+                                items: moviesList,
+                                searchLabel: 'Search movies',
+                                suggestion: const Center(
+                                  child: Text('Filter movies by name'),
+                                ),
+                                failure: const Center(
+                                  child: Text('No movies found :('),
+                                ),
+                                filter: (movie) => [
+                                  movie.title,
+                                  movie.overview,
+                                ],
+                                builder: (movie) => MovieItemWidget(movie: movie),
+                              ),
+                            );
+                          }
                         },
                       )),
                   Container(

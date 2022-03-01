@@ -14,7 +14,7 @@ class ApiService{
   static const String SERIES="";
   static const String TOP_RATED='top_rated';
   static const String GET_SIMILAR='{movie_id}/similar';
-  static const String GET_TRAILER='{movie_id}/videos';
+  static const String GET_TRAILER='/videos';
   ///we can just pass our prefered size instead of original as w400
   static const String IMAGE_URL='https://image.tmdb.org/t/p/w300/';
   static const String IMAGE_URLBIG='https://image.tmdb.org/t/p/original/';

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:practice/api/api.dart';
+import 'package:practice/api/api.dart';
 import 'package:practice/api/movie_result.dart';
 import 'package:practice/api/trailer_data_response.dart';
 import 'package:practice/hive/hivemovie.dart';
@@ -101,11 +102,13 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   }
 
   Future<void> loadTrailer() async {
+
     setState(() {
       trailerLoading = true;
     });
     final response = await http.get(Uri.parse(
-        'https://api.themoviedb.org/3/movie/${widget.movie.id}/videos?api_key=b8cdc8a029caa73a47ab09762ce5c157'));
+
+        ApiService.BASE_URL+widget.movie.id.toString()+ApiService.GET_TRAILER+ApiService.API_KEY));
     if (response.statusCode == 200) {
       var jsonResp = jsonDecode(response.body);
       TrailerData movie = TrailerData.fromJson(jsonResp);
