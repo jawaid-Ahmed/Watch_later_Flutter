@@ -4,6 +4,10 @@ class ApiService{
   static const String API_KEY='?api_key=b8cdc8a029caa73a47ab09762ce5c157';
   static const String MYAPI_KEY='?api_key=b7a0c4efe47ff18c7be56824d6e9972b';
   static const String POPULAR='popular';
+  static const String PAGE1='&page=1';
+  static const String PAGE2='&page=2';
+  static const String PAGE3='&page=3';
+  static const String PAGE4='&page=4';
   static const String UPCOMING='upcoming';
   static const String LATEST='latest';
   static const String INTHEATERS='now_playing';

@@ -12,7 +12,13 @@ class MovieItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=> MovieDetailsScreen( movie: movie,)));},
+      onTap: (){Navigator.push(context,
+          PageRouteBuilder(
+              transitionDuration: const Duration(seconds: 2),
+              pageBuilder: (_, __, ___) => MovieDetailsScreen( movie: movie,))
+
+      );
+        },
       child: Container(
         width: MediaQuery.of(context).size.width * 0.5,
         padding: const EdgeInsets.all(15),
@@ -24,14 +30,17 @@ class MovieItemWidget extends StatelessWidget {
             ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child:
-                CachedNetworkImage(
-                  imageUrl: ApiService.IMAGE_URL+movie.posterPath,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  placeholder: (context,val){
-                    return const Center(child:Image(image:  AssetImage('assets/images/icon.png'),));
-                  },
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                Hero(
+                  tag: movie,
+                  child: CachedNetworkImage(
+                    imageUrl: ApiService.IMAGE_URL+movie.posterPath,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    placeholder: (context,val){
+                      return const Center(child:Image(image:  AssetImage('assets/images/icon.png'),));
+                    },
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                  ),
                 ),
             ),
 

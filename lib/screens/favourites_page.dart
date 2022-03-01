@@ -15,12 +15,18 @@ class _FavouritesPageState extends State<FavouritesPage> {
 
   @override
   void initState() {
-    Hive.openBox<HiveMovie>('hivemovies');
+    openBox();
     super.initState();
+  }
+
+  Future openBox()async {
+    await Hive.openBox<HiveMovie>('hivemovies');
   }
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(title: Text("Favourites",style: TextStyle(fontWeight: FontWeight.w500,
           color:Theme.of(context).primaryColor
