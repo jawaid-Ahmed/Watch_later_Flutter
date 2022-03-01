@@ -8,8 +8,25 @@ class ThirdPage extends StatefulWidget {
 }
 
 class _ThirdPageState extends State<ThirdPage> {
+
+
+
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.amber,);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Tabs"),
+      ),
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+
+
+        ],
+      ),
+    );
   }
 }

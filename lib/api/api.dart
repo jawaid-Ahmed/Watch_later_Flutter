@@ -18,6 +18,10 @@ class ApiService{
   ///we can just pass our prefered size instead of original as w400
   static const String IMAGE_URL='https://image.tmdb.org/t/p/w300/';
   static const String IMAGE_URLBIG='https://image.tmdb.org/t/p/original/';
+  static const String GENRE_ACTION='&with_genres=28';
+  static const String GENRE_HORROR='&with_genres=27';
+  static const String GENRE_ADVENTURE='&with_genres=12';
+  static const String GENRE_COMEDY='&with_genres=35';
 
 
 

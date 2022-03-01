@@ -16,7 +16,23 @@ class HiveMovieWidget extends StatelessWidget {
 
     return InkWell(
       onTap: (){
-        //Navigator.push(context, MaterialPageRoute(builder: (_)=>
+        Result result=Result(adult: movie.adult,
+            backdropPath: movie.posterPath,
+            genreIds: [],
+            id: movie.id,
+            originalLanguage: movie.originalLanguage,
+            originalTitle: movie.title,
+            overview: movie.overview,
+            popularity: 0.0,
+            posterPath: movie.posterPath,
+            releaseDate: DateTime.parse(movie.releaseDate),
+            title: movie.title,
+            video: false,
+            voteAverage: movie.voteAverage,
+            voteCount: movie.voteCount
+        );
+
+        Navigator.push(context, MaterialPageRoute(builder: (_)=> MovieDetailsScreen(movie: result)));
       },
       child: Container(
         width: MediaQuery.of(context).size.width * 0.5,

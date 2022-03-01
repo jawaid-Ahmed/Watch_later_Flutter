@@ -1,26 +1,26 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:practice/api/api.dart';
 import 'package:practice/api/movie_response.dart';
 import 'package:practice/api/movie_result.dart';
 import 'package:practice/widgets/has_error_widget.dart';
 import 'package:practice/widgets/movie_placeholder_widget.dart';
-import 'package:practice/widgets/nowplaying/single_movie_item_widget.dart';
+import 'package:http/http.dart' as http;
 
-
-class Recommend extends StatefulWidget {
-  int movieId;
-  Recommend({Key? key,required this.movieId}) : super(key: key);
+import '../nowplaying/single_movie_item_widget.dart';
+class ActionMoviesTabWidget extends StatefulWidget {
+  const ActionMoviesTabWidget({Key? key}) : super(key: key);
 
   @override
-  State<Recommend> createState() => _RecommendState();
+  _ActionMoviesTabWidgetState createState() => _ActionMoviesTabWidgetState();
 }
 
-class _RecommendState extends State<Recommend> {
+class _ActionMoviesTabWidgetState extends State<ActionMoviesTabWidget> {
 
   bool isLoading=false;
   late Future<Movie> futureData;
+
 
   @override
   void initState() {
@@ -32,7 +32,7 @@ class _RecommendState extends State<Recommend> {
     setState(() {
       isLoading=true;
     });
-    final response = await http.get(Uri.parse(ApiService.BASE_URL+widget.movieId.toString()+ApiService.GET_SIMILAR+ApiService.API_KEY));
+    final response = await http.get(Uri.parse(ApiService.BASE_URL+ApiService.INTHEATERS+ApiService.API_KEY+ApiService.GENRE_ACTION));
 
     if(response.statusCode==200) {
 
@@ -43,11 +43,12 @@ class _RecommendState extends State<Recommend> {
         isLoading=true;
       });
       return movie;
-
+      //return res.map((data) => Result.fromJson(data)).toList();
 
     }else{
-
       return jsonDecode(response.body);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Wrong Response")));
     }
   }
 
@@ -56,23 +57,24 @@ class _RecommendState extends State<Recommend> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 12.0,top: 35,bottom: 15),
-          child: Text('Recommends'
-            ,style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18,),),
-        ),
         SizedBox(
-          height: 300,
+          height: 500,
           child: FutureBuilder <Movie>(
             future: futureData,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 Movie? data = snapshot.data;
                 return
-                  ListView.builder(
-                    physics: const BouncingScrollPhysics(),
+                  GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 200,
+                  childAspectRatio: 1 / 2,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 2),
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.all(6),
                       itemCount: data!.results.length,
-                      scrollDirection: Axis.horizontal,
+                      scrollDirection: Axis.vertical,
                       itemBuilder: (BuildContext context, int index) {
                         Result movie=data.results[index];
 
@@ -81,7 +83,6 @@ class _RecommendState extends State<Recommend> {
                   );
               } else if (snapshot.hasError) {
                 return const HasErrorWidget();
-
               }
               // By default show a loading spinner.
               return ListView.builder(

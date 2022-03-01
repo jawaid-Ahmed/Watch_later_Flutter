@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:practice/api/api.dart';
 import 'package:practice/api/movie_response.dart';
 import 'package:practice/api/movie_result.dart';
+import 'package:practice/widgets/has_error_widget.dart';
 import 'package:practice/widgets/movie_placeholder_widget.dart';
 import 'package:practice/widgets/nowplaying/single_movie_item_widget.dart';
 
@@ -78,7 +79,8 @@ class _PopularState extends State<Popular> {
                       }
                   );
               } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
+                return const HasErrorWidget();
+
               }
               // By default show a loading spinner.
               return ListView.builder(
