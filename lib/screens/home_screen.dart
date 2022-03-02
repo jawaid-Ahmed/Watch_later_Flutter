@@ -56,10 +56,10 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(10.0),
         child: BottomNavyBar(
           showElevation: false,
-
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           selectedIndex: _currentIndex,
           curve: Curves.easeInCirc,
+
           onItemSelected: (index) {
             setState(() => _currentIndex = index);
             _pageController.jumpToPage(index);

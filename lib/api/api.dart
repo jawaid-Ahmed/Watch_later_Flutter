@@ -22,7 +22,21 @@ class ApiService{
   static const String GENRE_HORROR='&with_genres=27';
   static const String GENRE_ADVENTURE='&with_genres=12';
   static const String GENRE_COMEDY='&with_genres=35';
+  static const String GENRE_ANIMATION='&with_genres=16';
+  static const String GENRE_CRIME='&with_genres=80';
+  static const String GENRE_DOCUMENTRY='&with_genres=99';
+  static const String GENRE_DRAMA='&with_genres=18';
+  static const String GENRE_FAMILY='&with_genres=10751';
+  static const String GENRE_FANTASY='&with_genres=14';
+  static const String GENRE_HISTORY='&with_genres=36';
+  static const String GENRE_MYSTERY='&with_genres=9648';
+  static const String GENRE_ROMANCE='&with_genres=10749';
+  static const String GENRE_SCIENCE_FICTION='&with_genres=878';
+  static const String GENRE_THRILLER='&with_genres=53';
+  static const String GENRE_WAR='&with_genres=10752';
+  static const String GENRE_WESTERN='&with_genres=37';
 
+  static const String MOVIE_CAST='/credits';
 
 
 }
