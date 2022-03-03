@@ -10,9 +10,21 @@ import 'package:practice/widgets/tabs/action_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/adventure_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/all_movies_tab_widget.dart';
 import 'package:http/http.dart' as http;
+import 'package:practice/widgets/tabs/animation_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/comedy_movies_tab_widget.dart';
+import 'package:practice/widgets/tabs/crime_movies_tab_widget.dart';
+import 'package:practice/widgets/tabs/documentary_movies_tab_widget.dart';
+import 'package:practice/widgets/tabs/drama_movies_tab_widget.dart';
+import 'package:practice/widgets/tabs/family_movies_tab_widget.dart';
+import 'package:practice/widgets/tabs/fantasy_movies_tab_widget.dart';
+import 'package:practice/widgets/tabs/history_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/horror_movies_tab_widget.dart';
+import 'package:practice/widgets/tabs/mystery_movies_tab_widget.dart';
+import 'package:practice/widgets/tabs/romance_movies_tab_widget.dart';
+import 'package:practice/widgets/tabs/scifi_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/thriller_movies_tab_widget.dart';
+import 'package:practice/widgets/tabs/war_movies_tab_widget.dart';
+import 'package:practice/widgets/tabs/western_movies_tab_widget.dart';
 import 'package:search_page/search_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,7 +43,7 @@ class _HomePageState extends State<HomePage>{
   bool isLoading=false;
 
   List<String> tabs=['All Movies','Action','Horror','Adventure','Comedy',
-                      'Thriller','Family','Animation','Crime','Documentary',
+                      'Thriller','Family','Animation','Crime','Documentary  ',
                       'Drama','Fantasy','History','Mystery','Romance','Sci-Fi','War','Western'];
   int selectedIndex=0;
 
@@ -76,18 +88,18 @@ class _HomePageState extends State<HomePage>{
       AdventureMoviesTabWidget(genere: ApiService.GENRE_ADVENTURE),
       ComedyMoviesTabWidget(genere: ApiService.GENRE_COMEDY),
       ThrillerMoviesTabWidget(genere: ApiService.GENRE_THRILLER),
-      ActionMoviesTabWidget(genere: ApiService.GENRE_FAMILY),
-      ActionMoviesTabWidget(genere: ApiService.GENRE_ANIMATION),
-      ActionMoviesTabWidget(genere: ApiService.GENRE_CRIME),
-      ActionMoviesTabWidget(genere: ApiService.GENRE_DOCUMENTRY),
-      ActionMoviesTabWidget(genere: ApiService.GENRE_DRAMA),
-      ActionMoviesTabWidget(genere: ApiService.GENRE_FANTASY),
-      ActionMoviesTabWidget(genere: ApiService.GENRE_HISTORY),
-      ActionMoviesTabWidget(genere: ApiService.GENRE_MYSTERY),
-      ActionMoviesTabWidget(genere: ApiService.GENRE_ROMANCE),
-      ActionMoviesTabWidget(genere: ApiService.GENRE_SCIENCE_FICTION),
-      ActionMoviesTabWidget(genere: ApiService.GENRE_WAR),
-      ActionMoviesTabWidget(genere: ApiService.GENRE_WESTERN),
+      FamilyMoviesTabWidget(genere: ApiService.GENRE_FAMILY),
+      AnimationMoviesTabWidget(genere: ApiService.GENRE_ANIMATION),
+      CrimeMoviesTabWidget(genere: ApiService.GENRE_CRIME),
+      DocumentaryMoviesTabWidget(genere: ApiService.GENRE_DOCUMENTRY),
+      DramaMoviesTabWidget(genere: ApiService.GENRE_DRAMA),
+      FantasyMoviesTabWidget(genere: ApiService.GENRE_FANTASY),
+      HistoryMoviesTabWidget(genere: ApiService.GENRE_HISTORY),
+      MysteryMoviesTabWidget(genere: ApiService.GENRE_MYSTERY),
+      RomanceMoviesTabWidget(genere: ApiService.GENRE_ROMANCE),
+      ScifiMoviesTabWidget(genere: ApiService.GENRE_SCIENCE_FICTION),
+      WarMoviesTabWidget(genere: ApiService.GENRE_WAR),
+      WesternMoviesTabWidget(genere: ApiService.GENRE_WESTERN),
 
     ];
 
