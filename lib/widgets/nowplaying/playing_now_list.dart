@@ -6,11 +6,12 @@ import 'package:practice/api/movie_response.dart';
 import 'package:practice/api/movie_result.dart';
 import 'package:practice/widgets/has_error_widget.dart';
 import 'package:practice/widgets/movie_placeholder_widget.dart';
-import 'package:practice/widgets/nowplaying/single_movie_item_widget.dart';
+import 'package:practice/widgets/single_movie_item_widget.dart';
 
 
 class PlayingNow extends StatefulWidget {
-  const PlayingNow({Key? key}) : super(key: key);
+  String baseUrl;
+  PlayingNow({Key? key,required this.baseUrl}) : super(key: key);
 
   @override
   State<PlayingNow> createState() => _PlayingNowState();
@@ -32,7 +33,7 @@ class _PlayingNowState extends State<PlayingNow> {
     setState(() {
       isLoading=true;
     });
-    final response = await http.get(Uri.parse(ApiService.BASE_URL+ApiService.INTHEATERS+ApiService.API_KEY));
+    final response = await http.get(Uri.parse(widget.baseUrl+ApiService.INTHEATERS+ApiService.API_KEY));
 
     if(response.statusCode==200) {
 

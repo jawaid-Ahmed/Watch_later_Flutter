@@ -9,15 +9,15 @@ import 'package:practice/widgets/movie_placeholder_widget.dart';
 import 'package:practice/widgets/single_serie_item_widget.dart';
 
 
-class OnAirSeries extends StatefulWidget {
+class AiringTodaySeries extends StatefulWidget {
   String baseUrl;
-  OnAirSeries({Key? key,required this.baseUrl}) : super(key: key);
+  AiringTodaySeries({Key? key,required this.baseUrl}) : super(key: key);
 
   @override
-  State<OnAirSeries> createState() => _OnAirSeriesState();
+  State<AiringTodaySeries> createState() => _AiringTodaySeriesState();
 }
 
-class _OnAirSeriesState extends State<OnAirSeries> {
+class _AiringTodaySeriesState extends State<AiringTodaySeries> {
 
   bool isLoading=false;
   late Future<SeriesResponse> futureData;
@@ -33,7 +33,7 @@ class _OnAirSeriesState extends State<OnAirSeries> {
     setState(() {
       isLoading=true;
     });
-    final response = await http.get(Uri.parse(widget.baseUrl+ApiService.ONAIRSERIES+ApiService.API_KEY));
+    final response = await http.get(Uri.parse(widget.baseUrl+ApiService.AIRINGTODAYSERIES+ApiService.API_KEY));
 
     if(response.statusCode==200) {
 
@@ -64,7 +64,7 @@ class _OnAirSeriesState extends State<OnAirSeries> {
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.0),
-          child: Text('On Air',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,),),
+          child: Text('Airing Today',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,),),
         ),
         SizedBox(
           height: 300,

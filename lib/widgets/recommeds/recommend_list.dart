@@ -6,7 +6,7 @@ import 'package:practice/api/movie_response.dart';
 import 'package:practice/api/movie_result.dart';
 import 'package:practice/widgets/has_error_widget.dart';
 import 'package:practice/widgets/movie_placeholder_widget.dart';
-import 'package:practice/widgets/nowplaying/single_movie_item_widget.dart';
+import 'package:practice/widgets/single_movie_item_widget.dart';
 
 
 class Recommend extends StatefulWidget {

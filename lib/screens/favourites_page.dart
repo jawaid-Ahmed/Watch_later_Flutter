@@ -28,9 +28,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
 
 
     return Scaffold(
-      appBar: AppBar(title: Text("Favourites",style: TextStyle(fontWeight: FontWeight.w500,
-          color:Theme.of(context).primaryColor
-      ),),
+      appBar: AppBar(title: const Text('Favourites',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22),),
         elevation: 0.0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 

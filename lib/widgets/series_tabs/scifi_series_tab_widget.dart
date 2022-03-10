@@ -12,15 +12,15 @@ import 'package:http/http.dart' as http;
 import 'package:practice/widgets/single_serie_item_widget.dart';
 
 import '../single_movie_item_widget.dart';
-class HorrorSeriesTabWidget extends StatefulWidget {
+class SciFiSeriesTabWidget extends StatefulWidget {
   String genere;
-  HorrorSeriesTabWidget({Key? key,required this.genere,}) : super(key: key);
+  SciFiSeriesTabWidget({Key? key,required this.genere,}) : super(key: key);
 
   @override
-  _HorrorSeriesTabWidgetState createState() => _HorrorSeriesTabWidgetState();
+  _SciFiSeriesTabWidgetState createState() => _SciFiSeriesTabWidgetState();
 }
 
-class _HorrorSeriesTabWidgetState extends State<HorrorSeriesTabWidget> {
+class _SciFiSeriesTabWidgetState extends State<SciFiSeriesTabWidget> {
 
   bool isLoading=false;
   late Future<SeriesResponse> futureData;

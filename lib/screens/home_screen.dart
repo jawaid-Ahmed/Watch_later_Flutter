@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:practice/screens/favourites_page.dart';
 import 'package:practice/screens/home_page.dart';
 import 'package:practice/screens/settings_page.dart';
-import 'package:practice/screens/third_page.dart';
+import 'package:practice/screens/series_page.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -17,7 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  int _currentIndex = 0;
+  int _currentIndex =0;
   late PageController _pageController;
 
   @override
@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> screens= const[
     HomePage(),
     FavouritesPage(),
-    ThirdPage(),
+    SeriesPage(),
     SettingsPage(),
   ];
 
@@ -66,16 +66,16 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           items: <BottomNavyBarItem>[
             BottomNavyBarItem(
-                title: const Text('Home'),
-                icon:  const Icon(Icons.home)
+                title: const Text('Movies'),
+                icon:  const Icon(Icons.movie)
             ),
             BottomNavyBarItem(
                 title: const Text('Favourites'),
                 icon: const Icon(Icons.favorite)
             ),
             BottomNavyBarItem(
-                title: const Text('Profile'),
-                icon: const Icon(Icons.person)
+                title: const Text('Series'),
+                icon: const Icon(Icons.tv)
             ),
             BottomNavyBarItem(
                 title: const Text('Settings'),

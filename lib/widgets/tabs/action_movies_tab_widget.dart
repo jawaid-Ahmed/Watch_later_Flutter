@@ -8,7 +8,7 @@ import 'package:practice/widgets/has_error_widget.dart';
 import 'package:practice/widgets/movie_placeholder_widget.dart';
 import 'package:http/http.dart' as http;
 
-import '../nowplaying/single_movie_item_widget.dart';
+import '../single_movie_item_widget.dart';
 class ActionMoviesTabWidget extends StatefulWidget {
   String genere;
   ActionMoviesTabWidget({Key? key,required this.genere}) : super(key: key);
@@ -34,12 +34,17 @@ class _ActionMoviesTabWidgetState extends State<ActionMoviesTabWidget> {
     setState(() {
       isLoading=true;
     });
-    final response = await http.get(Uri.parse(ApiService.BASE_URL+ApiService.INTHEATERS+ApiService.API_KEY+widget.genere));
+    final response = await http.get(Uri.parse(ApiService.BASE_URL+ApiService.POPULAR+ApiService.API_KEY+widget.genere));
+
 
     if(response.statusCode==200) {
 
       var jsonResp=jsonDecode(response.body);
+
+
       Movie movie=Movie.fromJson(jsonResp);
+      print("..............................action....................");
+      print(jsonResp.toString());
 
       setState(() {
         isLoading=true;

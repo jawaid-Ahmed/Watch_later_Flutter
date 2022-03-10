@@ -1,6 +1,9 @@
 class ApiService{
 
   static const String BASE_URL='https://api.themoviedb.org/3/movie/';
+  static const String BASE_URL_SERIES='https://api.themoviedb.org/3/tv/';
+  static const String BASE_URL_SERIESDISCOVER='http://api.themoviedb.org/3/discover/tv';
+  static const String BASE_URL_MOVIESDISCOVER='http://api.themoviedb.org/3/discover/movie';
   static const String API_KEY='?api_key=b8cdc8a029caa73a47ab09762ce5c157';
   static const String MYAPI_KEY='?api_key=b7a0c4efe47ff18c7be56824d6e9972b';
   static const String POPULAR='popular';
@@ -13,8 +16,10 @@ class ApiService{
   static const String INTHEATERS='now_playing';
   static const String SERIES="";
   static const String TOP_RATED='top_rated';
-  static const String GET_SIMILAR='{movie_id}/similar';
+  static const String GET_SIMILAR='/similar';
   static const String GET_TRAILER='/videos';
+
+  static const String SORT_BY_POPULARITY='&sort_by=popularity.desc';
   ///we can just pass our prefered size instead of original as w400
   static const String IMAGE_URL='https://image.tmdb.org/t/p/w300/';
   static const String IMAGE_URLBIG='https://image.tmdb.org/t/p/original/';
@@ -36,7 +41,14 @@ class ApiService{
   static const String GENRE_WAR='&with_genres=10752';
   static const String GENRE_WESTERN='&with_genres=37';
 
+  static const String GENRE_ACTION_ADVEN='&with_genres=10759';
+  static const String GENRE_SCI_FI_FANTASY='&with_genres=10765';
+  static const String GENRE_WAR_POLITICS='&with_genres=10768';
+
+
   static const String MOVIE_CAST='/credits';
+  static const String ONAIRSERIES='on_the_air';
+  static const String AIRINGTODAYSERIES='airing_today';
 
 
 }

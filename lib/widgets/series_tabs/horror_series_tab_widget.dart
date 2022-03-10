@@ -12,15 +12,15 @@ import 'package:http/http.dart' as http;
 import 'package:practice/widgets/single_serie_item_widget.dart';
 
 import '../single_movie_item_widget.dart';
-class ActionSeriesTabWidget extends StatefulWidget {
+class HorrorSeriesTabWidget extends StatefulWidget {
   String genere;
-  ActionSeriesTabWidget({Key? key,required this.genere,}) : super(key: key);
+  HorrorSeriesTabWidget({Key? key,required this.genere,}) : super(key: key);
 
   @override
-  _ActionSeriesTabWidgetState createState() => _ActionSeriesTabWidgetState();
+  _HorrorSeriesTabWidgetState createState() => _HorrorSeriesTabWidgetState();
 }
 
-class _ActionSeriesTabWidgetState extends State<ActionSeriesTabWidget> {
+class _HorrorSeriesTabWidgetState extends State<HorrorSeriesTabWidget> {
 
   bool isLoading=false;
   late Future<SeriesResponse> futureData;
@@ -37,7 +37,8 @@ class _ActionSeriesTabWidgetState extends State<ActionSeriesTabWidget> {
     setState(() {
       isLoading=true;
     });
-    final response = await http.get(Uri.parse(ApiService.BASE_URL_SERIES+ApiService.POPULAR+ApiService.API_KEY+widget.genere));
+    final response = await http.get(Uri.parse(ApiService.BASE_URL_SERIESDISCOVER+ApiService.API_KEY+widget.genere));
+
 
     if(response.statusCode==200) {
 

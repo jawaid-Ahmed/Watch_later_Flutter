@@ -40,14 +40,8 @@ class _OnAirSeriesState extends State<OnAirSeries> {
 
 
       var jsonResp=jsonDecode(response.body);
-
-
       SeriesResponse serie=SeriesResponse.fromJson(jsonResp);
 
-      print('...........................................................................series.......');
-      print(jsonResp.toString());
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(serie.totalResults.toString())));
 
       setState(() {
         isLoading=true;

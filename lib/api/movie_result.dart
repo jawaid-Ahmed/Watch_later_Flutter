@@ -69,11 +69,3 @@ class Result {
 
 
 }
-
-// enum OriginalLanguage { EN, JA, HI }
-//
-// final originalLanguageValues = EnumValues({
-//   "en": OriginalLanguage.EN,
-//   "hi": OriginalLanguage.HI,
-//   "ja": OriginalLanguage.JA
-// });

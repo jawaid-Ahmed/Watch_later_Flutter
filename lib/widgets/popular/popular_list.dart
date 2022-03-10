@@ -6,11 +6,12 @@ import 'package:practice/api/movie_response.dart';
 import 'package:practice/api/movie_result.dart';
 import 'package:practice/widgets/has_error_widget.dart';
 import 'package:practice/widgets/movie_placeholder_widget.dart';
-import 'package:practice/widgets/nowplaying/single_movie_item_widget.dart';
+import 'package:practice/widgets/single_movie_item_widget.dart';
 
 
 class Popular extends StatefulWidget {
-  const Popular({Key? key}) : super(key: key);
+  String baseUrl;
+  Popular({Key? key,required this.baseUrl}) : super(key: key);
 
   @override
   State<Popular> createState() => _PopularState();
@@ -31,7 +32,7 @@ class _PopularState extends State<Popular> {
     setState(() {
       isLoading=true;
     });
-    final response = await http.get(Uri.parse(ApiService.BASE_URL+ApiService.POPULAR+ApiService.API_KEY));
+    final response = await http.get(Uri.parse(widget.baseUrl+ApiService.POPULAR+ApiService.API_KEY));
 
     if(response.statusCode==200) {
 

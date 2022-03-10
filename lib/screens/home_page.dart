@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:practice/api/api.dart';
 import 'package:practice/api/movie_response.dart';
 import 'package:practice/api/movie_result.dart';
-import 'package:practice/widgets/nowplaying/single_movie_item_widget.dart';
+import 'package:practice/widgets/single_movie_item_widget.dart';
 import 'package:practice/widgets/tabs/action_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/adventure_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/all_movies_tab_widget.dart';
@@ -58,7 +58,6 @@ class _HomePageState extends State<HomePage>{
       isLoading=true;
     });
     final response = await http.get(Uri.parse(ApiService.BASE_URL+ApiService.INTHEATERS+ApiService.API_KEY));
-
 
     if(response.statusCode==200) {
 
@@ -113,12 +112,7 @@ class _HomePageState extends State<HomePage>{
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Home",
-          style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).primaryColor),
-        ),
+        title:const Text('Movies',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22),),
         elevation: 0.0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         actions: [

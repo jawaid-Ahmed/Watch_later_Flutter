@@ -8,7 +8,7 @@ import 'package:practice/widgets/has_error_widget.dart';
 import 'package:practice/widgets/movie_placeholder_widget.dart';
 import 'package:http/http.dart' as http;
 
-import '../nowplaying/single_movie_item_widget.dart';
+import '../single_movie_item_widget.dart';
 class DramaMoviesTabWidget extends StatefulWidget {
   String genere;
   DramaMoviesTabWidget({Key? key,required this.genere}) : super(key: key);

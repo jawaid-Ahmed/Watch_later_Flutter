@@ -4,23 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:practice/api/api.dart';
 import 'package:practice/api/movie_response.dart';
 import 'package:practice/api/movie_result.dart';
+import 'package:practice/api/series.dart';
+import 'package:practice/api/series_response.dart';
 import 'package:practice/widgets/has_error_widget.dart';
 import 'package:practice/widgets/movie_placeholder_widget.dart';
 import 'package:http/http.dart' as http;
+import 'package:practice/widgets/single_serie_item_widget.dart';
 
 import '../single_movie_item_widget.dart';
-class ActionMoviesTabWidget extends StatefulWidget {
+class ActionSeriesTabWidget extends StatefulWidget {
   String genere;
-  ActionMoviesTabWidget({Key? key,required this.genere,}) : super(key: key);
+  ActionSeriesTabWidget({Key? key,required this.genere,}) : super(key: key);
 
   @override
-  _ActionMoviesTabWidgetState createState() => _ActionMoviesTabWidgetState();
+  _ActionSeriesTabWidgetState createState() => _ActionSeriesTabWidgetState();
 }
 
-class _ActionMoviesTabWidgetState extends State<ActionMoviesTabWidget> {
+class _ActionSeriesTabWidgetState extends State<ActionSeriesTabWidget> {
 
   bool isLoading=false;
-  late Future<Movie> futureData;
+  late Future<SeriesResponse> futureData;
 
 
   @override
@@ -30,27 +33,32 @@ class _ActionMoviesTabWidgetState extends State<ActionMoviesTabWidget> {
     futureData=loadNowPlaying();
   }
 
-  Future<Movie> loadNowPlaying()async {
+  Future<SeriesResponse> loadNowPlaying()async {
     setState(() {
       isLoading=true;
     });
-    final response = await http.get(Uri.parse(ApiService.BASE_URL+ApiService.INTHEATERS+ApiService.API_KEY+widget.genere));
+    final response = await http.get(Uri.parse(ApiService.BASE_URL_SERIESDISCOVER+ApiService.API_KEY+widget.genere));
+
 
     if(response.statusCode==200) {
 
       var jsonResp=jsonDecode(response.body);
-      Movie movie=Movie.fromJson(jsonResp);
+      print('.......................series Action.............................');
+      print(jsonResp.toString());
+
+
+      SeriesResponse movie=SeriesResponse.fromJson(jsonResp);
 
       setState(() {
         isLoading=true;
       });
       return movie;
-      //return res.map((data) => Result.fromJson(data)).toList();
+
 
     }else{
-      return jsonDecode(response.body);
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Wrong Response")));
+      return jsonDecode(response.body);
     }
   }
 
@@ -61,11 +69,11 @@ class _ActionMoviesTabWidgetState extends State<ActionMoviesTabWidget> {
       children: [
         SizedBox(
           height: 500,
-          child: FutureBuilder <Movie>(
+          child: FutureBuilder <SeriesResponse>(
             future: futureData,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                Movie? data = snapshot.data;
+                SeriesResponse? data = snapshot.data;
                 return
                   GridView.builder(
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -75,12 +83,12 @@ class _ActionMoviesTabWidgetState extends State<ActionMoviesTabWidget> {
                   mainAxisSpacing: 2),
                       physics: const BouncingScrollPhysics(),
                       padding: const EdgeInsets.all(6),
-                      itemCount: data!.results.length,
+                      itemCount: data!.series.length,
                       scrollDirection: Axis.vertical,
                       itemBuilder: (BuildContext context, int index) {
-                        Result movie=data.results[index];
+                        Series movie=data.series[index];
 
-                        return MovieItemWidget(movie: movie);
+                        return SerieItemWidget(movie: movie);
                       }
                   );
               } else if (snapshot.hasError) {

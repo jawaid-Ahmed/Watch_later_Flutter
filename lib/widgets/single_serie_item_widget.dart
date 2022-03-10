@@ -1,23 +1,25 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:practice/api/api.dart';
-import 'package:practice/api/movie_result.dart';
+import 'package:practice/api/series.dart';
 import 'package:practice/screens/movie_details_screen.dart';
+import 'package:practice/screens/series_details_screen.dart';
 
-class MovieItemWidget extends StatelessWidget {
-  Result movie;
+class SerieItemWidget extends StatelessWidget {
+  Series movie;
 
-  MovieItemWidget({Key? key,required this.movie}) : super(key: key);
+  SerieItemWidget({Key? key,required this.movie}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){Navigator.push(context,
+      onTap: (){
+        Navigator.push(context,
           PageRouteBuilder(
               transitionDuration: const Duration(seconds: 2),
-              pageBuilder: (_, __, ___) => MovieDetailsScreen( movie: movie,))
+              pageBuilder: (_, __, ___) => SeriesDetailsScreen( drama: movie,))
 
-      );
+     );
         },
       child: Container(
         width: MediaQuery.of(context).size.width * 0.5,

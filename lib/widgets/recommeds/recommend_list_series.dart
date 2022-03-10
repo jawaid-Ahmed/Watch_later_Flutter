@@ -12,15 +12,15 @@ import 'package:practice/widgets/single_movie_item_widget.dart';
 import 'package:practice/widgets/single_serie_item_widget.dart';
 
 
-class PopularSeries extends StatefulWidget {
-  String baseUrl;
-  PopularSeries({Key? key,required this.baseUrl}) : super(key: key);
+class RecommendSeries extends StatefulWidget {
+  int movieId;
+  RecommendSeries({Key? key,required this.movieId}) : super(key: key);
 
   @override
-  State<PopularSeries> createState() => _PopularSeriesState();
+  State<RecommendSeries> createState() => _RecommendSeriesState();
 }
 
-class _PopularSeriesState extends State<PopularSeries> {
+class _RecommendSeriesState extends State<RecommendSeries> {
 
   bool isLoading=false;
   late Future<SeriesResponse> futureData;
@@ -35,23 +35,25 @@ class _PopularSeriesState extends State<PopularSeries> {
     setState(() {
       isLoading=true;
     });
-    final response = await http.get(Uri.parse(widget.baseUrl+ApiService.POPULAR+ApiService.API_KEY));
+    final response = await http.get(Uri.parse(ApiService.BASE_URL_SERIES+widget.movieId.toString()+ApiService.GET_SIMILAR+ApiService.API_KEY));
 
     if(response.statusCode==200) {
 
       var jsonResp=jsonDecode(response.body);
+
+
+
       SeriesResponse movie=SeriesResponse.fromJson(jsonResp);
 
       setState(() {
         isLoading=true;
       });
       return movie;
-      //return res.map((data) => Result.fromJson(data)).toList();
+
 
     }else{
+
       return jsonDecode(response.body);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Wrong Response")));
     }
   }
 
@@ -61,8 +63,9 @@ class _PopularSeriesState extends State<PopularSeries> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.0),
-          child: Text('Popular',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,),),
+          padding: EdgeInsets.only(left: 12.0,top: 35,bottom: 15),
+          child: Text('Recommends'
+            ,style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18,),),
         ),
         SizedBox(
           height: 300,

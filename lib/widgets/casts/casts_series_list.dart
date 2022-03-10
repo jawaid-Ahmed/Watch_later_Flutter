@@ -2,28 +2,27 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:practice/api/api.dart';
+import 'package:practice/api/cast_response.dart';
 import 'package:practice/api/movie_response.dart';
 import 'package:practice/api/movie_result.dart';
-import 'package:practice/api/series.dart';
-import 'package:practice/api/series_response.dart';
+import 'package:practice/widgets/casts/single_cast_item_widget.dart';
 import 'package:practice/widgets/has_error_widget.dart';
 import 'package:practice/widgets/movie_placeholder_widget.dart';
 import 'package:practice/widgets/single_movie_item_widget.dart';
-import 'package:practice/widgets/single_serie_item_widget.dart';
 
 
-class PopularSeries extends StatefulWidget {
-  String baseUrl;
-  PopularSeries({Key? key,required this.baseUrl}) : super(key: key);
+class CastSeries extends StatefulWidget {
+  int movieId;
+  CastSeries({Key? key,required this.movieId}) : super(key: key);
 
   @override
-  State<PopularSeries> createState() => _PopularSeriesState();
+  State<CastSeries> createState() => _CastSeriesState();
 }
 
-class _PopularSeriesState extends State<PopularSeries> {
+class _CastSeriesState extends State<CastSeries> {
 
   bool isLoading=false;
-  late Future<SeriesResponse> futureData;
+  late Future<CastResponse> futureData;
 
   @override
   void initState() {
@@ -31,27 +30,26 @@ class _PopularSeriesState extends State<PopularSeries> {
     futureData=loadNowPlaying();
   }
 
-  Future<SeriesResponse> loadNowPlaying()async {
+  Future<CastResponse> loadNowPlaying()async {
     setState(() {
       isLoading=true;
     });
-    final response = await http.get(Uri.parse(widget.baseUrl+ApiService.POPULAR+ApiService.API_KEY));
+    final response = await http.get(Uri.parse(ApiService.BASE_URL_SERIES+widget.movieId.toString()+ApiService.MOVIE_CAST+ApiService.API_KEY));
 
     if(response.statusCode==200) {
 
       var jsonResp=jsonDecode(response.body);
-      SeriesResponse movie=SeriesResponse.fromJson(jsonResp);
+      CastResponse movie=CastResponse.fromMap(jsonResp);
 
       setState(() {
         isLoading=true;
       });
       return movie;
-      //return res.map((data) => Result.fromJson(data)).toList();
+
 
     }else{
+
       return jsonDecode(response.body);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Wrong Response")));
     }
   }
 
@@ -61,25 +59,29 @@ class _PopularSeriesState extends State<PopularSeries> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.0),
-          child: Text('Popular',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,),),
+          padding: EdgeInsets.only(left: 12.0,top: 35,bottom: 15),
+          child: Text('Star Cast'
+            ,style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18,),),
         ),
         SizedBox(
-          height: 300,
-          child: FutureBuilder <SeriesResponse>(
+          height: 100,
+          child: FutureBuilder <CastResponse>(
             future: futureData,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                SeriesResponse? data = snapshot.data;
+                CastResponse? data = snapshot.data;
                 return
                   ListView.builder(
                     physics: const BouncingScrollPhysics(),
-                      itemCount: data!.series.length,
+                      itemCount: data!.cast.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
-                        Series movie=data.series[index];
+                        Cast actor=data.cast[index];
 
-                        return SerieItemWidget(movie: movie);
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CastItemWidget(actor: actor),
+                        );
                       }
                   );
               } else if (snapshot.hasError) {

@@ -6,11 +6,12 @@ import 'package:practice/api/movie_response.dart';
 import 'package:practice/api/movie_result.dart';
 import 'package:practice/widgets/has_error_widget.dart';
 import 'package:practice/widgets/movie_placeholder_widget.dart';
-import 'package:practice/widgets/nowplaying/single_movie_item_widget.dart';
+import 'package:practice/widgets/single_movie_item_widget.dart';
 
 
 class TopRated extends StatefulWidget {
-  const TopRated({Key? key}) : super(key: key);
+  String baseUrl;
+  TopRated({Key? key,required this.baseUrl}) : super(key: key);
 
   @override
   State<TopRated> createState() => _TopRatedState();
@@ -31,7 +32,7 @@ class _TopRatedState extends State<TopRated> {
     setState(() {
       isLoading=true;
     });
-    final response = await http.get(Uri.parse(ApiService.BASE_URL+ApiService.TOP_RATED+ApiService.API_KEY));
+    final response = await http.get(Uri.parse(widget.baseUrl+ApiService.TOP_RATED+ApiService.API_KEY));
 
     if(response.statusCode==200) {
 

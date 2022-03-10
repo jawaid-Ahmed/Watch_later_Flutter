@@ -1,29 +1,32 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:practice/api/api.dart';
 import 'package:practice/api/api.dart';
 import 'package:practice/api/movie_result.dart';
+import 'package:practice/api/series.dart';
 import 'package:practice/api/trailer_data_response.dart';
 import 'package:practice/hive/hivemovie.dart';
 import 'package:practice/screens/video_player_screen.dart';
-import 'package:practice/widgets/casts/casts_list.dart';
+import 'package:practice/widgets/casts/casts_series_list.dart';
 import 'package:practice/widgets/recommeds/recommend_list.dart';
 import 'package:http/http.dart' as http;
+import 'package:practice/widgets/recommeds/recommend_list_series.dart';
 
 import '../hive/boxes.dart';
 
-class MovieDetailsScreen extends StatefulWidget {
-  Result movie;
+class SeriesDetailsScreen extends StatefulWidget {
+  Series drama;
 
-  MovieDetailsScreen({Key? key, required this.movie}) : super(key: key);
+  SeriesDetailsScreen({Key? key, required this.drama}) : super(key: key);
 
   @override
-  _MovieDetailsScreenState createState() => _MovieDetailsScreenState();
+  _SeriesDetailsScreenState createState() => _SeriesDetailsScreenState();
 }
 
-class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
+class _SeriesDetailsScreenState extends State<SeriesDetailsScreen> {
   //final response = await http.get(Uri.parse(ApiService.BASE_URL+'${widget.movie}'+ApiService.GET_TRAILER+ApiService.API_KEY));
 
   genersFromId(List<int> ids) {
@@ -71,27 +74,24 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   void initState() {
     super.initState();
 
-
     openBox();
 
     createFavourite(
-      widget.movie.title,
-      widget.movie.releaseDate.toString(),
-      widget.movie.originalLanguage.toString(),
-      widget.movie.id,
-      widget.movie.adult,
-      widget.movie.posterPath,
-      widget.movie.overview,
-      widget.movie.voteAverage,
-      widget.movie.voteCount,
+      widget.drama.name,
+      widget.drama.firstAirDate.toString(),
+      widget.drama.originalLanguage.toString(),
+      widget.drama.id,
+      false,
+      widget.drama.posterPath,
+      widget.drama.overview,
+      widget.drama.voteAverage,
+      widget.drama.voteCount,
     );
-
-
 
     loadTrailer();
   }
 
-  Future openBox()async {
+  Future openBox() async {
     await Hive.openBox<HiveMovie>('hivemovies');
   }
 
@@ -103,13 +103,13 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   }
 
   Future<void> loadTrailer() async {
-
     setState(() {
       trailerLoading = true;
     });
-    final response = await http.get(Uri.parse(
-
-        ApiService.BASE_URL+widget.movie.id.toString()+ApiService.GET_TRAILER+ApiService.API_KEY));
+    final response = await http.get(Uri.parse(ApiService.BASE_URL_SERIES +
+        widget.drama.id.toString() +
+        ApiService.GET_TRAILER +
+        ApiService.API_KEY));
     if (response.statusCode == 200) {
       var jsonResp = jsonDecode(response.body);
       TrailerData movie = TrailerData.fromJson(jsonResp);
@@ -140,10 +140,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             Stack(
               children: [
                 Hero(
-                  tag: widget.movie,
+                  tag: widget.drama,
                   child: Image(
                     image: NetworkImage(
-                        ApiService.IMAGE_URLBIG + widget.movie.posterPath),
+                        ApiService.IMAGE_URLBIG + widget.drama.posterPath),
                     fit: BoxFit.cover,
                     height: size.height * 0.85,
                     width: size.width,
@@ -177,27 +177,27 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           onPressed: () {
                             if (isFavourite) {
                               deleteFromFavourites(
-                                widget.movie.title,
-                                widget.movie.releaseDate.toString(),
-                                widget.movie.originalLanguage.toString(),
-                                widget.movie.id,
-                                widget.movie.adult,
-                                widget.movie.posterPath,
-                                widget.movie.overview,
-                                widget.movie.voteAverage,
-                                widget.movie.voteCount,
+                                widget.drama.name,
+                                widget.drama.firstAirDate.toString(),
+                                widget.drama.originalLanguage.toString(),
+                                widget.drama.id,
+                                false,
+                                widget.drama.posterPath,
+                                widget.drama.overview,
+                                widget.drama.voteAverage,
+                                widget.drama.voteCount,
                               );
                             } else {
                               addHiveMovie(
-                                  widget.movie.title,
-                                  widget.movie.releaseDate.toString(),
-                                  widget.movie.originalLanguage.toString(),
-                                  widget.movie.id,
-                                  widget.movie.adult,
-                                  widget.movie.posterPath,
-                                  widget.movie.overview,
-                                  widget.movie.voteAverage,
-                                  widget.movie.voteCount,
+                                  widget.drama.name,
+                                  widget.drama.firstAirDate.toString(),
+                                  widget.drama.originalLanguage.toString(),
+                                  widget.drama.id,
+                                  false,
+                                  widget.drama.posterPath,
+                                  widget.drama.overview,
+                                  widget.drama.voteAverage,
+                                  widget.drama.voteCount,
                                   context);
 
                               setState(() {
@@ -222,7 +222,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 ),
                 Positioned(
                   right: 0.0,
-                  bottom: 80,
+                  bottom: 110,
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: const BorderRadius.only(
@@ -251,28 +251,43 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       ),
                     ),
                   ),
+                ),
+                Positioned(
+                  right: 20,
+                  bottom: 15,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width*0.7,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.black,
+                    ),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          widget.drama.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 19,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 )
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0, bottom: 5),
-              child: Text(
-                widget.movie.title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 19,
-                ),
-              ),
-            ),
+
             Text(
-              '[${genersFromId(widget.movie.genreIds)}]',
+              '[${genersFromId(widget.drama.genreIds)}]',
               style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 15,
                   color: Colors.grey.shade500),
             ),
 
-            CastMovies(movieId: widget.movie.id),
+
+            CastSeries(movieId: widget.drama.id),
 
             SizedBox(
               width: size.width,
@@ -292,7 +307,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 12.0, right: 8),
                     child: Text(
-                      widget.movie.overview,
+                      widget.drama.overview,
                       style: const TextStyle(
                         fontWeight: FontWeight.w100,
                         fontSize: 16,
@@ -300,8 +315,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     ),
                   ),
                   Row(
-                    children: [
-                      const Padding(
+                    children: const [
+                      Padding(
                         padding: EdgeInsets.all(12.0),
                         child: Text(
                           'Adult :',
@@ -309,18 +324,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 12.0, right: 8),
-                        child: Text(
-                          widget.movie.adult.toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: widget.movie.adult
-                                  ? Colors.red
-                                  : Colors.green),
                         ),
                       ),
                     ],
@@ -340,7 +343,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: 12.0, right: 8),
                         child: Text(
-                          widget.movie.originalLanguage,
+                          widget.drama.originalLanguage,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
@@ -364,7 +367,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: 12.0, top: 5),
                         child: Text(
-                          widget.movie.releaseDate.toString().split(' ').first,
+                          widget.drama.firstAirDate.toString().split(' ').first,
                           style: const TextStyle(
                             fontWeight: FontWeight.w300,
                             fontSize: 16,
@@ -388,9 +391,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: 12.0, top: 5),
                         child: Text(
-                          widget.movie.voteAverage.toString() +
+                          widget.drama.voteAverage.toString() +
                               ' total Votes: ' +
-                              widget.movie.voteCount.toString(),
+                              widget.drama.voteCount.toString(),
                           style: const TextStyle(
                             fontWeight: FontWeight.w300,
                             fontSize: 16,
@@ -399,7 +402,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       ),
                     ],
                   ),
-                  Recommend(movieId: widget.movie.id),
+                  RecommendSeries(movieId: widget.drama.id),
                 ],
               ),
             )
@@ -415,7 +418,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     final box = Boxes.getHiveMovies();
     for (HiveMovie movi in box.values) {
       if (movi.id == movie.id) {
-        exist=true;
+        exist = true;
       }
     }
 
@@ -423,19 +426,16 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   }
 
   Future deleteFromFavourites(
-
-      String title,
-      String releaseDate,
-      String lang,
-      int id,
-      bool isAdult,
-      String imageUrl,
-      String overView,
-      double voteAvg,
-      int voteCOunt,
-
-      )async{
-
+    String title,
+    String releaseDate,
+    String lang,
+    int id,
+    bool isAdult,
+    String imageUrl,
+    String overView,
+    double voteAvg,
+    int voteCOunt,
+  ) async {
     final movie = HiveMovie()
       ..id = id
       ..title = title
@@ -447,17 +447,15 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       ..voteAverage = voteAvg
       ..originalLanguage = lang;
 
-
     final box = Boxes.getHiveMovies();
     for (HiveMovie movi in box.values) {
       if (movi.id == movie.id) {
         movi.delete();
         setState(() {
-          isFavourite=false;
+          isFavourite = false;
         });
       }
     }
-
   }
 
   Future addHiveMovie(
@@ -499,18 +497,16 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   }
 
   createFavourite(
-      String title,
-      String releaseDate,
-      String lang,
-      int id,
-      bool isAdult,
-      String imageUrl,
-      String overView,
-      double voteAvg,
-      int voteCOunt,
-
-      ) async {
-
+    String title,
+    String releaseDate,
+    String lang,
+    int id,
+    bool isAdult,
+    String imageUrl,
+    String overView,
+    double voteAvg,
+    int voteCOunt,
+  ) async {
     await Hive.openBox<HiveMovie>('hivemovies');
     final movie = HiveMovie()
       ..id = id
@@ -523,14 +519,13 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       ..voteAverage = voteAvg
       ..originalLanguage = lang;
 
-
     if (!movieExist(movie)) {
       setState(() {
-        isFavourite=false;
+        isFavourite = false;
       });
     } else {
       setState(() {
-        isFavourite=true;
+        isFavourite = true;
         //hiveGlobalMovie=movie;
       });
     }
