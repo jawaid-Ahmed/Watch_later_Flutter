@@ -1,15 +1,13 @@
-import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:practice/api/api.dart';
 import 'package:practice/api/movie_response.dart';
 import 'package:practice/api/movie_result.dart';
-import 'package:practice/widgets/single_movie_item_widget.dart';
+import 'package:practice/screens/search_screen.dart';
 import 'package:practice/widgets/tabs/action_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/adventure_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/all_movies_tab_widget.dart';
-import 'package:http/http.dart' as http;
 import 'package:practice/widgets/tabs/animation_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/comedy_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/crime_movies_tab_widget.dart';
@@ -37,8 +35,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>{
 
 
-  late List<Result> moviesList;
-  late Future<Movie> futureData;
+
 
   bool isLoading=false;
 
@@ -47,37 +44,6 @@ class _HomePageState extends State<HomePage>{
                       'Drama','Fantasy','History','Mystery','Romance','Sci-Fi','War','Western'];
   int selectedIndex=0;
 
-  @override
-  void initState(){
-    super.initState();
-    futureData=loadAllMovies();
-  }
-
-  Future<Movie> loadAllMovies()async {
-    setState(() {
-      isLoading=true;
-    });
-    final response = await http.get(Uri.parse(ApiService.BASE_URL+ApiService.INTHEATERS+ApiService.API_KEY));
-
-    if(response.statusCode==200) {
-
-      var jsonResp=jsonDecode(response.body);
-      Movie movie=Movie.fromJson(jsonResp);
-      List<Result> moviesList=movie.results;
-
-      setState(() {
-        this.moviesList=moviesList;
-        isLoading=true;
-      });
-      return movie;
-
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("No Movies Found")));
-      return jsonDecode(response.body);
-
-    }
-  }
 
   getTabViewAccordingly(int tab){
     final tabsList=[
@@ -107,7 +73,6 @@ class _HomePageState extends State<HomePage>{
 
   @override
   Widget build(BuildContext context) {
-    final _inputController = TextEditingController();
 
 
     return Scaffold(
@@ -172,29 +137,7 @@ class _HomePageState extends State<HomePage>{
                       ),
                       child: CupertinoSearchTextField(
                         placeholder: "search movies series ",
-                        controller: _inputController,
-                        onChanged: (value) async {
-                          if (value.isNotEmpty) {
-                            showSearch(
-                              context: context,
-                              delegate: SearchPage<Result>(
-                                items: moviesList,
-                                searchLabel: 'Search movies',
-                                suggestion: const Center(
-                                  child: Text('Filter movies by name'),
-                                ),
-                                failure: const Center(
-                                  child: Text('No movies found :('),
-                                ),
-                                filter: (movie) => [
-                                  movie.title,
-                                  movie.overview,
-                                ],
-                                builder: (movie) => MovieItemWidget(movie: movie),
-                              ),
-                            );
-                          }
-                        },
+                        onTap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=> const SearchScreen()));}
                       )),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.2,
@@ -259,4 +202,6 @@ class _HomePageState extends State<HomePage>{
       ),
     );
   }
+
+
 }

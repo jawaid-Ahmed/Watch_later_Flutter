@@ -43,7 +43,11 @@ class _WarSeriesTabWidgetState extends State<WarSeriesTabWidget> {
     if(response.statusCode==200) {
 
       var jsonResp=jsonDecode(response.body);
+
+
       SeriesResponse movie=SeriesResponse.fromJson(jsonResp);
+      print('.........................war.....................');
+      print(jsonResp.toString());
 
       setState(() {
         isLoading=true;
@@ -88,7 +92,8 @@ class _WarSeriesTabWidgetState extends State<WarSeriesTabWidget> {
                       }
                   );
               } else if (snapshot.hasError) {
-                return const HasErrorWidget();
+                return
+                    const HasErrorWidget();
               }
               // By default show a loading spinner.
               return ListView.builder(

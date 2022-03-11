@@ -74,6 +74,9 @@ class _SeriesDetailsScreenState extends State<SeriesDetailsScreen> {
   void initState() {
     super.initState();
 
+    setState(() {
+
+    });
     openBox();
 
     createFavourite(
