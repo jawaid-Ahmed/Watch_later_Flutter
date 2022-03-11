@@ -30,7 +30,7 @@ class Series {
   int voteCount;
 
   factory Series.fromJson(Map<String, dynamic> json) => Series(
-    backdropPath: json["backdrop_path"],
+    backdropPath: json["backdrop_path"] ?? "null",
     firstAirDate: DateTime.parse(json["first_air_date"]),
     genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
     id: json["id"],
@@ -40,7 +40,7 @@ class Series {
     originalName: json["original_name"],
     overview: json["overview"],
     popularity: json["popularity"].toDouble(),
-    posterPath: json["poster_path"],
+    posterPath: json["poster_path"] ?? "null",
     voteAverage: json["vote_average"].toDouble(),
     voteCount: json["vote_count"],
   );

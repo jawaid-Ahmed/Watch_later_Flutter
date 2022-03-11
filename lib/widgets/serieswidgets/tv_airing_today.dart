@@ -85,7 +85,7 @@ class _AiringTodaySeriesState extends State<AiringTodaySeries> {
                       }
                   );
               } else if (snapshot.hasError) {
-                return const HasErrorWidget();
+                return const Center(child:  HasErrorWidget(),);
               }
               // By default show a loading spinner.
               return ListView.builder(

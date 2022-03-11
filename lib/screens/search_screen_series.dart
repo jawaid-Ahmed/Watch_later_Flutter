@@ -6,18 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:practice/api/api.dart';
 import 'package:practice/api/movie_response.dart';
 import 'package:practice/api/movie_result.dart';
+import 'package:practice/api/series.dart';
+import 'package:practice/api/series_response.dart';
 import 'package:practice/widgets/has_error_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:practice/widgets/movie_placeholder_widget.dart';
 import 'package:practice/widgets/single_movie_item_widget.dart';
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+import 'package:practice/widgets/single_serie_item_widget.dart';
+class SearchScreenSeries extends StatefulWidget {
+  const SearchScreenSeries({Key? key}) : super(key: key);
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<SearchScreenSeries> createState() => _SearchScreenSeriesState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenSeriesState extends State<SearchScreenSeries> {
 
 
   //late Future<Movie> futureData;
@@ -34,27 +37,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   }
 
-/*  showSearchPage() {
-    showSearch(
-      context: context,
-      delegate: SearchPage<Result>(
-        items: moviesList,
-        searchLabel: 'Search movies',
-        suggestion: const Center(
-          child: Text('Filter movies by name'),
-        ),
-        failure: const Center(
-          child: Text('No movies found :('),
-        ),
-        filter: (movie) => [
-          movie.title,
-          movie.overview,
-        ],
-        builder: (movie) => MovieItemWidget(movie: movie),
-      ),
-    );
-  }*/
-  Future<Movie> loadAllMovies(String query)async {
+
+  Future<SeriesResponse> searchSeries(String query)async {
     setState(() {
       isLoading=true;
     });
@@ -69,10 +53,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
       var movies=jsonResp["results"];
 
-      Movie movie=Movie(page: jsonResp["page"], results: [], totalPages: jsonResp["total_pages"], totalResults: jsonResp["totalResults"]);
-        for(int i=0; i<5; i++) {
-          Result result = Result.fromJson(movies[i]);
-          movie.results.add(result);
+      SeriesResponse movie=SeriesResponse(page: jsonResp["page"], series: [], totalPages: jsonResp["total_pages"], totalResults: jsonResp["totalResults"]);
+        for(int i=0; i<8; i++) {
+          Series result = Series.fromJson(movies[i]);
+          movie.series.add(result);
         }
 
       setState(() {
@@ -125,7 +109,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         setState(() {
                           this.futureData=null;
                         });
-                        Future<Movie> futureData=loadAllMovies("&query="+val);
+                        Future<SeriesResponse> futureData=searchSeries("&query="+val);
                         setState(() {
                           this.futureData=futureData;
                         });
@@ -157,11 +141,11 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           futureData !=null ? SizedBox(
             height: MediaQuery.of(context).size.height * 0.8,
-            child: FutureBuilder <Movie>(
+            child: FutureBuilder <SeriesResponse>(
               future: futureData,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  Movie? data = snapshot.data;
+                  SeriesResponse? data = snapshot.data;
                   return
                     GridView.builder(
                         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -171,12 +155,12 @@ class _SearchScreenState extends State<SearchScreen> {
                             mainAxisSpacing: 2),
                         physics: const BouncingScrollPhysics(),
                         padding: const EdgeInsets.all(6),
-                        itemCount: data!.results.length,
+                        itemCount: data!.series.length,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (BuildContext context, int index) {
-                          Result movie=data.results[index];
+                          Series movie=data.series[index];
 
-                          return MovieItemWidget(movie: movie);
+                          return SerieItemWidget(movie: movie);
                         }
                     );
                 } else if (snapshot.hasError) {

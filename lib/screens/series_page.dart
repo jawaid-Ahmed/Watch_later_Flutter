@@ -6,6 +6,7 @@ import 'package:practice/api/api.dart';
 import 'package:http/http.dart' as http;
 import 'package:practice/api/series.dart';
 import 'package:practice/api/series_response.dart';
+import 'package:practice/screens/search_screen.dart';
 import 'package:practice/widgets/series_tabs/action_series_tab_widget.dart';
 import 'package:practice/widgets/series_tabs/adventure_series_tab_widget.dart';
 import 'package:practice/widgets/series_tabs/anim_series_tab_widget.dart';
@@ -54,8 +55,7 @@ class SeriesPage extends StatefulWidget {
 
 class _SeriesPageState extends State<SeriesPage> {
 
-  late List<Series> seriesList;
-  late Future<SeriesResponse> futureData;
+
 
   bool isLoading=false;
 
@@ -64,11 +64,6 @@ class _SeriesPageState extends State<SeriesPage> {
     'Drama','Fantasy','History','Mystery','Romance','Sci-Fi','War','Western'];
   int selectedIndex=0;
 
-  @override
-  void initState(){
-    super.initState();
-    //futureData=loadAllSeries();
-  }
 
   getTabViewAccordingly(int tab){
     final tabsList=[
@@ -98,7 +93,6 @@ class _SeriesPageState extends State<SeriesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _inputController = TextEditingController();
 
 
     return Scaffold(
@@ -133,28 +127,7 @@ class _SeriesPageState extends State<SeriesPage> {
                       ),
                       child: CupertinoSearchTextField(
                         placeholder: "search series ",
-                        controller: _inputController,
-                        onChanged: (value) async {
-                          if (value.isNotEmpty) {
-                            showSearch(
-                              context: context,
-                              delegate: SearchPage<Series>(
-                                items: seriesList,
-                                searchLabel: 'Search movies',
-                                suggestion: const Center(
-                                  child: Text('Filter movies by name'),
-                                ),
-                                failure: const Center(
-                                  child: Text('No movies found :('),
-                                ),
-                                filter: (serie) => [
-                                  serie.name,
-                                ],
-                                builder: (movie) => SerieItemWidget(movie: movie),
-                              ),
-                            );
-                          }
-                        },
+                          onTap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=> const SearchScreen()));}
                       )),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.2,

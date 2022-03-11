@@ -5,6 +5,7 @@ class ApiService{
   static const String BASE_URL_SERIESDISCOVER='http://api.themoviedb.org/3/discover/tv';
   static const String BASE_URL_MOVIESDISCOVER='http://api.themoviedb.org/3/discover/movie';
   static const String BASE_URL_MOVIES_SEARCH='http://api.themoviedb.org/3/search/movie';
+  static const String BASE_URL_SERIES_SEARCH='http://api.themoviedb.org/3/search/tv';
   static const String API_KEY='?api_key=b8cdc8a029caa73a47ab09762ce5c157';
   static const String MYAPI_KEY='?api_key=b7a0c4efe47ff18c7be56824d6e9972b';
   static const String POPULAR='popular';

@@ -41,7 +41,7 @@ class SerieItemWidget extends StatelessWidget {
                     placeholder: (context,val){
                       return const Center(child:Image(image:  AssetImage('assets/images/icon.png'),));
                     },
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                    errorWidget: (context, url, error) =>const Center(child:  Icon(Icons.error)),
                   ),
                 ),
             ),
