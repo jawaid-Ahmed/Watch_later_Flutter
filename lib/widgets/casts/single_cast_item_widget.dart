@@ -13,13 +13,13 @@ class CastItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        //Navigator.push(context,
-          // PageRouteBuilder(
-          //     transitionDuration: const Duration(seconds: 2),
-          //     pageBuilder: (_, __, ___) => MovieDetailsScreen( actor: actor,))
-
-      //);
+      onTap: () async {
+        await showDialog(
+            context: context,
+            builder: (_) => ClipRRect(
+                borderRadius: BorderRadius.circular(35),
+                child: imageDialog(actor,context))
+        );
         },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(50),
@@ -41,3 +41,47 @@ class CastItemWidget extends StatelessWidget {
     );
   }
 }
+
+Widget imageDialog(Cast actor, BuildContext context) {
+  return Dialog(
+    // backgroundColor: Colors.transparent,
+    // elevation: 0,
+    child: ClipRRect(
+        borderRadius: BorderRadius.circular(35),
+
+        child: Container(
+        width: MediaQuery.of(context).size.width * 0.75,
+       
+        child: Stack(
+          children: [
+            Hero(
+              tag: actor,
+              child: Image.network(
+                ApiService.IMAGE_URL+actor.profilePath,
+                fit: BoxFit.cover,
+            ),
+            ),
+
+            Positioned(
+              right: 15,
+                top: 15,
+                child:IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: const Icon(Icons.close_rounded),
+                  color: Colors.redAccent,
+                ),
+            ),
+            Positioned(
+              bottom: 15,
+              right: 15,
+              child:Text(actor.originalName,style: const TextStyle(fontSize: 15,fontWeight: FontWeight.w600),)
+            ),
+          ],
+        )
+      ),
+    ),
+  );}
+
+

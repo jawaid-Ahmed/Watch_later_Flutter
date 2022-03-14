@@ -52,11 +52,11 @@ class _SeriesDetailsScreenState extends State<SeriesDetailsScreen> {
       37: 'Western',
     };
 
-    String value = '';
+    List<String> value =[];
     for (final mapEntry in moviesGeners.entries) {
       for (int i = 0; i < ids.length; i++) {
         if (mapEntry.key == ids[i]) {
-          value += mapEntry.value + ",";
+          value.add(mapEntry.value);
         }
       }
     }
@@ -282,7 +282,7 @@ class _SeriesDetailsScreenState extends State<SeriesDetailsScreen> {
             ),
 
             Text(
-              '[${genersFromId(widget.drama.genreIds)}]',
+              genersFromId(widget.drama.genreIds).toString(),
               style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 15,

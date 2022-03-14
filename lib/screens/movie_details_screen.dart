@@ -9,6 +9,7 @@ import 'package:practice/api/trailer_data_response.dart';
 import 'package:practice/hive/hivemovie.dart';
 import 'package:practice/screens/video_player_screen.dart';
 import 'package:practice/widgets/casts/casts_list.dart';
+import 'package:practice/widgets/genres_containers.dart';
 import 'package:practice/widgets/recommeds/recommend_list.dart';
 import 'package:http/http.dart' as http;
 
@@ -49,11 +50,11 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       37: 'Western',
     };
 
-    String value = '';
+    List<String> value =[];
     for (final mapEntry in moviesGeners.entries) {
       for (int i = 0; i < ids.length; i++) {
         if (mapEntry.key == ids[i]) {
-          value += mapEntry.value + ",";
+          value.add(mapEntry.value);
         }
       }
     }
@@ -67,9 +68,12 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   late Future<TrailerData> futureData;
   String trailerKey = '';
 
+  List<String> genreIdsList=[];
+
   @override
   void initState() {
     super.initState();
+
 
 
     openBox();
@@ -87,6 +91,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     );
 
 
+    genreIdsList=genersFromId(widget.movie.genreIds);
 
     loadTrailer();
   }
@@ -222,7 +227,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 ),
                 Positioned(
                   right: 0.0,
-                  bottom: 80,
+                  bottom: 120,
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: const BorderRadius.only(
@@ -251,7 +256,13 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       ),
                     ),
                   ),
-                )
+                ),
+
+                Positioned(
+                    left: 15,
+                    bottom: -15,
+                    child: GenersContainersWidget(genreIdsList: genreIdsList,))
+
               ],
             ),
             Padding(
@@ -263,13 +274,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                   fontSize: 19,
                 ),
               ),
-            ),
-            Text(
-              '[${genersFromId(widget.movie.genreIds)}]',
-              style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
-                  color: Colors.grey.shade500),
             ),
 
             CastMovies(movieId: widget.movie.id),

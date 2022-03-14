@@ -70,13 +70,13 @@ dev_dependencies:
 
 
 flutter_native_splash:
-  color: "#32b3a4"
+  color: "#000000"
   image: assets/images/icon.png
-  color_dark: "#32b3a4"
+  color_dark: "#000000"
   image_dark: assets/images/icon.png
   android: true
   ios: true
-  android_gravity: fill # make the image fill the screen for android
+  #android_gravity: fill # make the image fill the screen for android
   ios_content_mode: scaleAspectFill
 
 
