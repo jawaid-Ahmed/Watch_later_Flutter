@@ -67,7 +67,7 @@ class _SearchScreenSeriesState extends State<SearchScreenSeries> {
 
     }else{
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("No Movies Found")));
+          content: Text("No Series Found")));
       return jsonDecode(response.body);
 
     }
@@ -103,16 +103,20 @@ class _SearchScreenSeriesState extends State<SearchScreenSeries> {
                       ],
                     ),
                     child: CupertinoSearchTextField(
-                      placeholder: "search movies series ",
+                      placeholder: "search series ",
                       controller: _inputController,
                       onSubmitted: (val){
-                        setState(() {
-                          this.futureData=null;
-                        });
-                        Future<SeriesResponse> futureData=searchSeries("&query="+val);
-                        setState(() {
-                          this.futureData=futureData;
-                        });
+                        if(_inputController.text.length > 1){
+                          setState(() {
+                            this.futureData=null;
+                          });
+                          Future<SeriesResponse> futureData=searchSeries("&query="+val);
+                          setState(() {
+                            this.futureData=futureData;
+                          });
+                        }else{
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Insert Series Name")));
+                        }
                       },
                     )),
                 Container(
@@ -132,7 +136,22 @@ class _SearchScreenSeriesState extends State<SearchScreenSeries> {
                     ],
                   ),
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+
+                      if(_inputController.text.length > 1 ) {
+                        setState(() {
+                          this.futureData = null;
+                        });
+                        Future<SeriesResponse> futureData = searchSeries(
+                            "&query=" + _inputController.text);
+                        setState(() {
+                          this.futureData = futureData;
+                        });
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Insert Series Name")));
+                      }
+
+                    },
                     icon: const Icon(Icons.search),
                   ),
                 ),

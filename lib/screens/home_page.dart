@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage>{
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                      width: MediaQuery.of(context).size.width * 0.7,
+                      width: MediaQuery.of(context).size.width * 0.92,
                       height: 50,
                       decoration: BoxDecoration(
                         color: Theme.of(context).scaffoldBackgroundColor,
@@ -139,27 +139,7 @@ class _HomePageState extends State<HomePage>{
                         placeholder: "search movies series ",
                         onTap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=> const SearchScreen()));}
                       )),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.2,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.orangeAccent,
-                      borderRadius: BorderRadius.circular(9),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.search),
-                    ),
-                  ),
+
                 ],
               ),
             ),

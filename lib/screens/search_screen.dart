@@ -119,16 +119,21 @@ class _SearchScreenState extends State<SearchScreen> {
                       ],
                     ),
                     child: CupertinoSearchTextField(
-                      placeholder: "search movies series ",
+                      placeholder: "search movies",
                       controller: _inputController,
                       onSubmitted: (val){
-                        setState(() {
-                          this.futureData=null;
-                        });
-                        Future<Movie> futureData=loadAllMovies("&query="+val);
-                        setState(() {
-                          this.futureData=futureData;
-                        });
+                        if(_inputController.text.length > 1) {
+                          setState(() {
+                            this.futureData = null;
+                          });
+                          Future<Movie> futureData = loadAllMovies(
+                              "&query=" + val);
+                          setState(() {
+                            this.futureData = futureData;
+                          });
+                        }else{
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Insert Movie Name")));
+                        }
                       },
                     )),
                 Container(
@@ -148,7 +153,19 @@ class _SearchScreenState extends State<SearchScreen> {
                     ],
                   ),
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if(_inputController.text.length > 1) {
+                        setState(() {
+                          this.futureData = null;
+                        });
+                        Future<Movie> futureData = loadAllMovies("&query="+_inputController.text);
+                        setState(() {
+                          this.futureData = futureData;
+                        });
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Insert Movie Name")));
+                      }
+                    },
                     icon: const Icon(Icons.search),
                   ),
                 ),
