@@ -2,8 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:practice/api/api.dart';
 import 'package:practice/api/cast_response.dart';
-import 'package:practice/api/movie_result.dart';
-import 'package:practice/screens/movie_details_screen.dart';
 
 class CastItemWidget extends StatelessWidget {
   Cast actor;

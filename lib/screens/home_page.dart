@@ -2,8 +2,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:practice/api/api.dart';
-import 'package:practice/api/movie_response.dart';
-import 'package:practice/api/movie_result.dart';
 import 'package:practice/screens/search_screen.dart';
 import 'package:practice/widgets/tabs/action_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/adventure_movies_tab_widget.dart';
@@ -23,7 +21,6 @@ import 'package:practice/widgets/tabs/scifi_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/thriller_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/war_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/western_movies_tab_widget.dart';
-import 'package:search_page/search_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

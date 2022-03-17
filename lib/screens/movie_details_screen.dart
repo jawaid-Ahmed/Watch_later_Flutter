@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hive/hive.dart';
-import 'package:practice/api/api.dart';
 import 'package:practice/api/api.dart';
 import 'package:practice/api/movie_result.dart';
 import 'package:practice/api/trailer_data_response.dart';
@@ -16,9 +16,9 @@ import 'package:http/http.dart' as http;
 import '../hive/boxes.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
-  Result movie;
+  final Result movie;
 
-  MovieDetailsScreen({Key? key, required this.movie}) : super(key: key);
+  const MovieDetailsScreen({Key? key, required this.movie}) : super(key: key);
 
   @override
   _MovieDetailsScreenState createState() => _MovieDetailsScreenState();
@@ -121,8 +121,15 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
       for (var data in movie.results) {
         if (data.official) {
-          trailerKey = movie.results.first.key;
+          trailerKey = data.key;
         }
+      }
+
+      if(trailerKey==''){
+        trailerKey=movie.results.first.key;
+        setState(() {
+          trailerLoading = false;
+        });
       }
 
       if (trailerKey != '') {
@@ -144,13 +151,18 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
           children: [
             Stack(
               children: [
+                Container(
+                  height: size.height * 0.85,
+                  width: size.width,
+                  color: Colors.transparent,
+                ),
                 Hero(
                   tag: widget.movie,
                   child: Image(
                     image: NetworkImage(
                         ApiService.IMAGE_URLBIG + widget.movie.posterPath),
                     fit: BoxFit.cover,
-                    height: size.height * 0.85,
+                    height: size.height * 0.75,
                     width: size.width,
                   ),
                 ),
@@ -170,7 +182,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           },
                           icon: const Icon(
                             Icons.arrow_back,
-                            size: 32,
+                            size: 26,
                           ),
                         ),
                       ),
@@ -213,12 +225,12 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           icon: isFavourite
                               ? const Icon(
                                   Icons.favorite,
-                                  size: 32,
+                                  size: 26,
                                   color: Colors.red,
                                 )
                               : const Icon(
                                   Icons.favorite_outline,
-                                  size: 32,
+                                  size: 26,
                                 ),
                         ),
                       ),
@@ -260,18 +272,42 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
                 Positioned(
                     left: 15,
-                    bottom: -15,
-                    child: GenersContainersWidget(genreIdsList: genreIdsList,))
+                    bottom: 35,
+                    right: 15,
+                    child: Center(child: GenersContainersWidget(genreIdsList: genreIdsList,)))
 
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 20.0, bottom: 5),
+              padding: const EdgeInsets.only(top: 0.0, bottom: 5),
               child: Text(
                 widget.movie.title,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 19,
+                ),
+              ),
+            ),
+
+            Container(
+              width: size.width,
+              color: Colors.transparent,
+              child: Center(
+                child: RatingBar.builder(
+                  initialRating: 3,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, _) => const Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                    size: 15,
+                  ),
+                  onRatingUpdate: (rating) {
+                    print(rating);
+                  },
                 ),
               ),
             ),

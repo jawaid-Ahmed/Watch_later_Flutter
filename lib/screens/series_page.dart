@@ -1,14 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:practice/api/api.dart';
-import 'package:http/http.dart' as http;
-import 'package:practice/api/series.dart';
-import 'package:practice/api/series_response.dart';
 import 'package:practice/screens/search_screen.dart';
 import 'package:practice/widgets/series_tabs/action_series_tab_widget.dart';
 import 'package:practice/widgets/series_tabs/adventure_series_tab_widget.dart';
+import 'package:practice/widgets/series_tabs/all_series_tab_widget.dart';
 import 'package:practice/widgets/series_tabs/anim_series_tab_widget.dart';
 import 'package:practice/widgets/series_tabs/comedy_series_tab_widget.dart';
 import 'package:practice/widgets/series_tabs/crime_series_tab_widget.dart';
@@ -23,27 +19,7 @@ import 'package:practice/widgets/series_tabs/romance_series_tab_widget.dart';
 import 'package:practice/widgets/series_tabs/scifi_series_tab_widget.dart';
 import 'package:practice/widgets/series_tabs/thriller_series_tab_widget.dart';
 import 'package:practice/widgets/series_tabs/war_series_tab_widget.dart';
-import 'package:practice/widgets/single_serie_item_widget.dart';
-import 'package:practice/widgets/tabs/action_movies_tab_widget.dart';
-import 'package:practice/widgets/tabs/adventure_movies_tab_widget.dart';
-import 'package:practice/widgets/tabs/all_movies_tab_widget.dart';
-import 'package:practice/widgets/series_tabs/all_series_tab_widget.dart';
-import 'package:practice/widgets/tabs/animation_movies_tab_widget.dart';
-import 'package:practice/widgets/tabs/comedy_movies_tab_widget.dart';
-import 'package:practice/widgets/tabs/crime_movies_tab_widget.dart';
-import 'package:practice/widgets/tabs/documentary_movies_tab_widget.dart';
-import 'package:practice/widgets/tabs/drama_movies_tab_widget.dart';
-import 'package:practice/widgets/tabs/family_movies_tab_widget.dart';
-import 'package:practice/widgets/tabs/fantasy_movies_tab_widget.dart';
-import 'package:practice/widgets/tabs/history_movies_tab_widget.dart';
-import 'package:practice/widgets/tabs/horror_movies_tab_widget.dart';
-import 'package:practice/widgets/tabs/mystery_movies_tab_widget.dart';
-import 'package:practice/widgets/tabs/romance_movies_tab_widget.dart';
-import 'package:practice/widgets/tabs/scifi_movies_tab_widget.dart';
-import 'package:practice/widgets/tabs/thriller_movies_tab_widget.dart';
-import 'package:practice/widgets/tabs/war_movies_tab_widget.dart';
 import 'package:practice/widgets/tabs/western_movies_tab_widget.dart';
-import 'package:search_page/search_page.dart';
 
 
 class SeriesPage extends StatefulWidget {
