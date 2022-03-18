@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:practice/api/api.dart';
 import 'package:practice/api/api.dart';
@@ -11,6 +12,7 @@ import 'package:practice/api/trailer_data_response.dart';
 import 'package:practice/hive/hivemovie.dart';
 import 'package:practice/screens/video_player_screen.dart';
 import 'package:practice/widgets/casts/casts_series_list.dart';
+import 'package:practice/widgets/genres_containers.dart';
 import 'package:practice/widgets/recommeds/recommend_list.dart';
 import 'package:http/http.dart' as http;
 import 'package:practice/widgets/recommeds/recommend_list_series.dart';
@@ -27,6 +29,8 @@ class SeriesDetailsScreen extends StatefulWidget {
 }
 
 class _SeriesDetailsScreenState extends State<SeriesDetailsScreen> {
+
+
   //final response = await http.get(Uri.parse(ApiService.BASE_URL+'${widget.movie}'+ApiService.GET_TRAILER+ApiService.API_KEY));
 
   genersFromId(List<int> ids) {
@@ -67,8 +71,11 @@ class _SeriesDetailsScreenState extends State<SeriesDetailsScreen> {
   bool isLoading = false;
   bool trailerLoading = false;
   bool isFavourite = false;
+  bool dramaRated=true;
   late Future<TrailerData> futureData;
   String trailerKey = '';
+
+  List<String> genreIdsList=[];
 
   @override
   void initState() {
@@ -90,6 +97,8 @@ class _SeriesDetailsScreenState extends State<SeriesDetailsScreen> {
       widget.drama.voteAverage,
       widget.drama.voteCount,
     );
+
+    genreIdsList=genersFromId(widget.drama.genreIds);
 
     loadTrailer();
   }
@@ -115,12 +124,19 @@ class _SeriesDetailsScreenState extends State<SeriesDetailsScreen> {
         ApiService.API_KEY));
     if (response.statusCode == 200) {
       var jsonResp = jsonDecode(response.body);
-      TrailerData movie = TrailerData.fromJson(jsonResp);
+      TrailerData trailer = TrailerData.fromJson(jsonResp);
 
-      for (var data in movie.results) {
+      for (var data in trailer.results) {
         if (data.official) {
-          trailerKey = movie.results.first.key;
+          trailerKey = data.key;
         }
+      }
+
+      if(trailerKey==''){
+        trailerKey=trailer.results.first.key;
+        setState(() {
+          trailerLoading = false;
+        });
       }
 
       if (trailerKey != '') {
@@ -142,13 +158,18 @@ class _SeriesDetailsScreenState extends State<SeriesDetailsScreen> {
           children: [
             Stack(
               children: [
+                Container(
+                  height: size.height * 0.82,
+                  width: size.width,
+                  color: Colors.transparent,
+                ),
                 Hero(
                   tag: widget.drama,
                   child: Image(
                     image: NetworkImage(
                         ApiService.IMAGE_URLBIG + widget.drama.posterPath),
                     fit: BoxFit.cover,
-                    height: size.height * 0.85,
+                    height: size.height * 0.75,
                     width: size.width,
                   ),
                 ),
@@ -255,40 +276,64 @@ class _SeriesDetailsScreenState extends State<SeriesDetailsScreen> {
                     ),
                   ),
                 ),
+
                 Positioned(
-                  right: 20,
-                  bottom: 15,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width*0.7,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.black,
-                    ),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          widget.drama.name,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 19,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
+                    left: 15,
+                    bottom: 25,
+                    right: 15,
+                    child: Center(child: GenersContainersWidget(genreIdsList: genreIdsList,)))
               ],
             ),
 
-            Text(
-              genersFromId(widget.drama.genreIds).toString(),
-              style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
-                  color: Colors.grey.shade500),
+            Container(
+              width: MediaQuery.of(context).size.width*0.7,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.transparent,
+              ),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    widget.drama.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 19,
+                    ),
+                  ),
+                ),
+              ),
             ),
 
+
+            Container(
+              width: size.width,
+              color: Colors.transparent,
+              child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      RatingBar.builder(
+                        initialRating: 3,
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                          size: 15,
+                        ),
+                        onRatingUpdate: (rating) async {
+                          await rateDrama(rating);
+                        },
+                      ),
+                      !dramaRated ? const CircularProgressIndicator() : const SizedBox(),
+                    ],
+                  )
+              ),
+            ),
 
             CastSeries(movieId: widget.drama.id),
 
@@ -533,4 +578,51 @@ class _SeriesDetailsScreenState extends State<SeriesDetailsScreen> {
       });
     }
   }
+
+
+  rateDrama(double rating) async {
+    setState(() {
+      dramaRated=false;
+    });
+
+    rating = rating * 2;
+
+    Uri uri = Uri.parse(ApiService.SESSIONID_AP+ApiService.API_KEY);
+
+    var resp = await http.post(
+      uri,
+    );
+
+
+    if(resp.statusCode==200){
+
+      var jsonResp = jsonDecode(resp.body);
+      String sessionId=jsonResp['guest_session_id'];
+
+      String url=ApiService.BASE_URL_SERIES+widget.drama.id.toString()+ApiService.RATING+ApiService.API_KEY+ApiService.SESSIONID+sessionId;
+      Uri uri = Uri.parse(url);
+
+      var body = {"value": rating.toString()};
+
+      var res = await http.post(
+        uri,
+        body: body,
+      );
+
+
+      if(jsonDecode(res.body)['success']){
+        setState(() {
+          dramaRated=true;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Drama Rated Successfully")));
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Ratings Couldn't be Saved")));
+      }
+
+    }
+
+
+
+  }
+
 }
