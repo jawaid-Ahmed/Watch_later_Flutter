@@ -7,6 +7,7 @@ class ApiService{
   static const String BASE_URL_MOVIES_SEARCH='http://api.themoviedb.org/3/search/movie';
   static const String BASE_URL_SERIES_SEARCH='http://api.themoviedb.org/3/search/tv';
   static const String API_KEY='?api_key=b8cdc8a029caa73a47ab09762ce5c157';
+  static const String API_KEY_WithoutKEYWORD='b8cdc8a029caa73a47ab09762ce5c157';
   static const String MYAPI_KEY='?api_key=b7a0c4efe47ff18c7be56824d6e9972b';
   static const String POPULAR='popular';
   static const String PAGE1='&page=1';
@@ -18,8 +19,11 @@ class ApiService{
   static const String INTHEATERS='now_playing';
   static const String SERIES="";
   static const String TOP_RATED='top_rated';
+
+  static const String SESSIONID='&guest_session_id=';
   static const String GET_SIMILAR='/similar';
   static const String GET_TRAILER='/videos';
+
 
   static const String SORT_BY_POPULARITY='&sort_by=popularity.desc';
   ///we can just pass our prefered size instead of original as w400
@@ -42,6 +46,8 @@ class ApiService{
   static const String GENRE_THRILLER='&with_genres=53';
   static const String GENRE_WAR='&with_genres=10752';
   static const String GENRE_WESTERN='&with_genres=37';
+  static const String RATING='/rating';
+  static const String TRANSLATIONS='translations';
 
   static const String GENRE_ACTION_ADVEN='&with_genres=10759';
   static const String GENRE_SCI_FI_FANTASY='&with_genres=10765';
@@ -51,6 +57,10 @@ class ApiService{
   static const String MOVIE_CAST='/credits';
   static const String ONAIRSERIES='on_the_air';
   static const String AIRINGTODAYSERIES='airing_today';
+  static const String SESSIONID_AP='http://api.themoviedb.org/3//authentication/guest_session/new';
+
+
+
 
 
 }

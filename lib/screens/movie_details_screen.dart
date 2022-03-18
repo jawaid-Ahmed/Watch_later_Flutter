@@ -43,7 +43,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       10402: 'Music',
       9648: 'Mystery',
       10749: 'Romance',
-      878: 'Science Fiction',
+      878: 'Sci-Fi',
       10770: 'TV Movie',
       53: 'Thriller',
       10752: 'War',
@@ -65,6 +65,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   bool isLoading = false;
   bool trailerLoading = false;
   bool isFavourite = false;
+  bool movieRated=true;
+
   late Future<TrailerData> futureData;
   String trailerKey = '';
 
@@ -293,22 +295,28 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
               width: size.width,
               color: Colors.transparent,
               child: Center(
-                child: RatingBar.builder(
-                  initialRating: 3,
-                  minRating: 1,
-                  direction: Axis.horizontal,
-                  allowHalfRating: true,
-                  itemCount: 5,
-                  itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  itemBuilder: (context, _) => const Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                    size: 15,
-                  ),
-                  onRatingUpdate: (rating) {
-                    print(rating);
-                  },
-                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    RatingBar.builder(
+                      initialRating: 3,
+                      minRating: 1,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                        size: 15,
+                      ),
+                      onRatingUpdate: (rating) async {
+                        await rateAMovie(rating);
+                      },
+                    ),
+                    !movieRated ? const CircularProgressIndicator() : const SizedBox(),
+                  ],
+                )
               ),
             ),
 
@@ -574,5 +582,53 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         //hiveGlobalMovie=movie;
       });
     }
+  }
+
+  rateAMovie(double rating) async {
+    setState(() {
+      movieRated=false;
+    });
+
+    rating = rating * 2;
+
+    Uri uri = Uri.parse(ApiService.SESSIONID_AP+ApiService.API_KEY);
+
+    var resp = await http.post(
+      uri,
+    );
+
+    print('............................tryhing Request.......................');
+    if(resp.statusCode==200){
+
+      print('StatusCode: '+resp.statusCode.toString());
+
+      var jsonResp = jsonDecode(resp.body);
+      String sessionId=jsonResp['guest_session_id'];
+
+      print(sessionId);
+
+
+      String url=ApiService.BASE_URL+widget.movie.id.toString()+ApiService.RATING+ApiService.API_KEY+ApiService.SESSIONID+sessionId;
+      Uri uri = Uri.parse(url);
+
+      var body = {"value": rating.toString()};
+      var res = await http.post(
+        uri,
+        body: body,
+      );
+
+      if(jsonDecode(res.body)['success']){
+        setState(() {
+          movieRated=true;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Movie Rated Successfully")));
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Ratings Couldn't be Saved")));
+      }
+
+    }
+
+
+
   }
 }
